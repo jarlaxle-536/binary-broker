@@ -1,0 +1,34 @@
+{% block content %}
+<h4>
+  Commodities
+</h4>
+<div class="table-responsive" style="width: 80%; align: center;">
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Current price</th>
+      <th scope="col">Mean price</th>
+      <th scope="col">Diagram</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for cmd in commodities %}
+    <tr>
+      <td>
+        <a href="{% url 'commodity_detail' cmd.pk %}">
+          {{cmd.name}}
+        </a>
+      </td>
+      <td>
+        {{cmd.price}}
+      </td>
+      <td>
+        {{cmd.mean_price}}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock content %}
