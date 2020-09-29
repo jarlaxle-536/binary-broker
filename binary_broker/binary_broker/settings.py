@@ -42,8 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap4',
     'simple_history',
-    'binary_broker.applications.main.apps.MainConfig'
-    'binary_broker.applications.trading.apps.TradingConfig'
+    'binary_broker.applications.main.apps.MainConfig',
+    'binary_broker.applications.trading.apps.TradingConfig',
 ]
 
 MIDDLEWARE = [
