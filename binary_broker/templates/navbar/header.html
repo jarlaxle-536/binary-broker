@@ -1,0 +1,12 @@
+{% load static %}
+{% load i18n %}
+
+<a class="navbar-brand" href="{% url 'main_page' %}">
+  <img src='{% static "logo.png" %}' width="150" alt="">
+  <h3 style="color: white;">
+    {% trans 'AppCaption' %}
+  </h3>
+  <p style="color: white;">
+    {% trans 'AppSlogan' %}
+  </p>
+</a>

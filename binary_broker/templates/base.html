@@ -1,0 +1,20 @@
+{% load static %}
+{% load bootstrap4 %}
+
+<html>
+<head>
+{% bootstrap_css %}
+<link rel='stylesheet' href='{% static "css/styles.css" %}'>
+{% bootstrap_javascript jquery='full' %}
+<title>
+ Binary Broker
+</title>
+</head>
+<body>
+  {% include 'navbar/navbar.html' %}
+  <div style="height:600px" class="container-fluid text-center text-md-left">
+  {% block content %}
+  {% endblock content %}
+</div>
+ </body>
+</html>
