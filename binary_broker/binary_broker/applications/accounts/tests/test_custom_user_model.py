@@ -8,30 +8,44 @@ from binary_broker.applications.accounts.exceptions import *
 
 class CustomUserTest(TestCase):
 
-    name = 'testing custom user'
+    name = 'creating general user'
 
     def test_create_user_with_no_email(self):
-        fixture = build_fixture({'name': 'vasya', 'password': None})
+        fixture = build_fixture({
+            'name': 'vasya',
+            'password': None
+            })
         with self.assertRaises(EmailNotProvided):
             CustomUser.objects.create_user(**fixture)
 
     def test_create_user_with_no_password(self):
-        fixture = build_fixture({'email': None})
+        fixture = build_fixture({
+            'email': None
+            })
         with self.assertRaises(PasswordNotProvided):
             CustomUser.objects.create_user(**fixture)
 
     def test_create_user_with_invalid_email(self):
-        fixture = build_fixture({'email': 'vasya', 'password': None})
+        fixture = build_fixture({
+            'email': 'vasya',
+            'password': None
+            })
         with self.assertRaises(ValidationError):
             CustomUser.objects.create_user(**fixture)
 
     def test_create_user_with_invalid_password(self):
-        fixture = build_fixture({'email': None, 'password': '1111'})
+        fixture = build_fixture({
+            'email': None,
+            'password': '1111'
+        })
         with self.assertRaises(ValidationError):
             CustomUser.objects.create_user(**fixture)
 
     def test_create_user_with_valid_email_and_password(self):
-        fixture = build_fixture({'email': None, 'password': None})
+        fixture = build_fixture({
+            'email': None,
+            'password': None
+        })
         CustomUser.objects.create_user(**fixture)
 
 def build_fixture(dct):

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h4>
+  Login
+</h4>
+
+<form method="post" novalidate>
+{% csrf_token %}
+{{ form|crispy }}
+<input type="hidden" name="next" value="{{ next }}">
+<input type="submit" class="b1" value="OK"  >
+</form>
+
+{% endblock content %}

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'bootstrap4',
+    'crispy_forms',
     'simple_history',
     'binary_broker.applications.accounts.apps.AccountsConfig',
     'binary_broker.applications.main.apps.MainConfig',
@@ -134,3 +135,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR), 'static_assets'
 ]
+
+# Styles, forms, etc
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
