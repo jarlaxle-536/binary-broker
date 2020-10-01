@@ -1,0 +1,2 @@
+class EmailNotProvided(Exception):
+    pass

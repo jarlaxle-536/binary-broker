@@ -40,8 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'bootstrap4',
     'simple_history',
+    'binary_broker.applications.accounts.apps.AccountsConfig',
     'binary_broker.applications.main.apps.MainConfig',
     'binary_broker.applications.trading.apps.TradingConfig',
 ]
@@ -87,6 +89,9 @@ DATABASES = {
     }
 }
 
+# Authentication
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
