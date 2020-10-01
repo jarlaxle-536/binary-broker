@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'django_celery_results',
     'bootstrap4',
     'crispy_forms',
     'simple_history',
@@ -138,3 +139,18 @@ STATICFILES_DIRS = [
 
 # Styles, forms, etc
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# Celery
+
+# CELERY
+
+CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_CACHE_BACKEND = 'django-cache'
+CELERY_CACHE_BACKEND = 'default'
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_cache_table',
+    }
+}
