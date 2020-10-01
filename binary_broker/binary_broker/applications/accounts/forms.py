@@ -1,6 +1,6 @@
 import django.forms as dj_forms
 
-from .models import User
+from .models import CustomUser
 
 class RegisterForm(dj_forms.ModelForm):
     email = dj_forms.EmailField()
@@ -8,5 +8,5 @@ class RegisterForm(dj_forms.ModelForm):
     password_confirmation = dj_forms.CharField()
 
     class Meta:
-        model = User
+        model = CustomUser
         fields = ["email", "password"]
