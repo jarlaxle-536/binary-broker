@@ -3,7 +3,7 @@ from simple_history.models import HistoricalRecords
 import datetime
 import random
 
-from binary_broker.applications.accounts.models import CustomUser
+from binary_broker.applications.accounts.models import User
 
 class TimedeltaField(models.IntegerField):
     def __str__(self):
@@ -39,7 +39,7 @@ class Bet(models.Model):
     VENTURES = [(v, str(v))
         for v in [1, 2, 5, 10, 20, 50, 100]]
 
-    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     direction = models.BooleanField(choices=DIRECTIONS, null=True)
     venture = models.FloatField(choices=VENTURES, null=False)
     duration = TimedeltaField(choices=DURATIONS, null=False)

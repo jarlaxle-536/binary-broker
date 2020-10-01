@@ -1,11 +1,9 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
 {% load crispy_forms_tags %}
 
 {% block content %}
-<h4>
-  Login
-</h4>
 
 <form method="post" novalidate>
 {% csrf_token %}
@@ -13,5 +11,10 @@
 <input type="hidden" name="next" value="{{ next }}">
 <input type="submit" class="b1" value="OK"  >
 </form>
+
+<h4>
+  {% trans 'SocialLoginString'%}
+</h4>
+
 
 {% endblock content %}
