@@ -3,8 +3,8 @@ from django.db.utils import IntegrityError
 from django.test import TestCase
 import faker
 
-from .models import CustomUser
-from .exceptions import *
+from binary_broker.applications.accounts.models import CustomUser
+from binary_broker.applications.accounts.exceptions import *
 
 class CustomUserTest(TestCase):
 

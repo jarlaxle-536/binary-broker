@@ -11,6 +11,8 @@ class UserManager(BaseUserManager):
         email = self.check_email(email)
         password = self.check_password(password)
         user = self.model(email=email)
+        user.set_password(password)
+        print(user.__dict__)
         user.save()
 
     def check_email(self, email):
