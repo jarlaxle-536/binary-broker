@@ -1,0 +1,14 @@
+{% load i18n %}
+
+<ul class="navbar-nav justify-content-center not-impl">
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'main_page' %}">
+      {% trans 'Home' %}
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'commodity_list' %}">
+      {% trans 'Trading' %}
+    </a>
+  </li>
+</ul>
