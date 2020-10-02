@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 from django.test import TestCase
+import contextlib
 import faker
 
 from binary_broker.applications.accounts.models import CustomUser
@@ -8,62 +9,57 @@ from binary_broker.applications.accounts.exceptions import *
 
 class CustomUserCreationTest(TestCase):
 
-    name = 'creating general user'
+    name = 'creating user tests'
 
-    def test_create_user_with_no_email(self):
-        fixture = build_fixture({
-            'name': 'vasya',
-            'password': None
-            })
-        with self.assertRaises(EmailNotProvided):
-            CustomUser.objects.create_user(**fixture)
+    def general_test(self,
+            fixture={'email': None, 'password': None},
+            func = CustomUser.objects.create_user,
+            exception_catched=None,
+            check_func=None):
+        context_manager = (self.assertRaises(exception_catched)
+            if exception_catched else contextlib.nullcontext())
+        with context_manager:
+            result = func(**build_fixture(fixture))
+            if check_func:
+                check_func(result)
 
-    def test_create_user_with_no_password(self):
-        fixture = build_fixture({
-            'email': None
-            })
-        with self.assertRaises(PasswordNotProvided):
-            CustomUser.objects.create_user(**fixture)
+    def test_create_user_with_smth_missing(self):
+        self.general_test(
+            fixture={'name': 'vasya', 'password': None},
+            exception_catched=EmailNotProvided
+        )
+        self.general_test(
+            fixture={'email': None},
+            exception_catched=PasswordNotProvided
+        )
 
-    def test_create_user_with_invalid_email(self):
-        fixture = build_fixture({
-            'email': 'vasya',
-            'password': None
-            })
-        with self.assertRaises(ValidationError):
-            CustomUser.objects.create_user(**fixture)
+    def test_create_user_with_smth_invalid(self):
+        self.general_test(
+            fixture={'email': 'vasya', 'password': None},
+            exception_catched=ValidationError
+        )
+        self.general_test(
+            fixture={'email': None, 'password': '1'},
+            exception_catched=ValidationError
+        )
 
-    def test_create_user_with_invalid_password(self):
-        fixture = build_fixture({
-            'email': None,
-            'password': '1111'
-        })
-        with self.assertRaises(ValidationError):
-            CustomUser.objects.create_user(**fixture)
-
-    def test_create_user_with_valid_email_and_password(self):
-        fixture = build_fixture({
-            'email': None,
-            'password': None
-        })
-        CustomUser.objects.create_user(**fixture)
-
-    def test_create_superuser(self):
-        fixture = build_fixture({
-            'email': None,
-            'password': None
-        })
-        su = CustomUser.objects.create_superuser(**fixture)
-        self.assertTrue(su.is_superuser)
+    def test_create_valid_users(self):
+        self.general_test(
+            fixture={'email': None, 'password': None}
+        )
+        self.general_test(
+            fixture={'email': None, 'password': None},
+            func=CustomUser.objects.create_superuser,
+            check_func=lambda result: self.assertTrue(result.is_superuser),
+        )
 
 def build_fixture(dct):
-#    print(f'Building fixture from {dct}')
-    fixture = {k: v if v else valid_fixture.get(k, None) for k, v in dct.items()}
-#    print(f'Created fixture: {fixture}')
+    fixture = {k: v if v else valid_fixture.get(k, lambda: None).__call__()
+        for k, v in dct.items()}
     return fixture
 
 FAKER = faker.Faker()
 valid_fixture = {
-    'email': FAKER.email(),
-    'password': FAKER.password()
+    'email': lambda : FAKER.email(),
+    'password': lambda : FAKER.password()
 }
