@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import json
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -73,6 +74,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'binary_broker.applications.accounts.context_processors.auth_context_processor'
             ],
         },
     },
@@ -94,6 +96,8 @@ DATABASES = {
 # Authentication
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
+with open(os.path.join(BASE_DIR, 'secrets', 'api_secrets.json')) as file:
+    API_SECRETS = json.load(file)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

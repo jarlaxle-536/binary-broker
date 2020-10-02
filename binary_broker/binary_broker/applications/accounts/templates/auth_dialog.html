@@ -16,23 +16,24 @@
       <div class="modal-body">
           <ul class="nav nav-tabs nav-fill">
             <li class="nav-item">
-              <a class="nav-link active" data-toggle="tab" href="#login_form">Login</a>
+              <a class="nav-link active" data-toggle="tab" href="#login_form">
+                {% trans 'LoginString' %}
+              </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#register_form">Sign up</a>
+              <a class="nav-link" data-toggle="tab" href="#register_form">
+                {% trans 'SignUpString' %}
+              </a>
             </li>
           </ul>
-        <!-- Tab panes -->
         <div class="tab-content" style="height:320px;">
           <div class="tab-pane active container" id="login_form">
-            <form method="post" novalidate>
+            <form action="{% url 'login' %}" method="post" novalidate>
               {% csrf_token %}
               {{ login_form|crispy }}
               <input type="hidden" name="next" value="{{ next }}">
               <div class="d-flex justify-content-center" style="width: 100%;">
-                <button class="btn btn-default">
-                  <input type="submit" class="b1" value="Login">
-                </button>
+                <input class="btn btn-primary btn-lg btn-block bg-dark" type="submit" value="{% trans 'LoginString' %}">
               </div>
             </form>
           </div>
@@ -42,9 +43,7 @@
               {{ signup_form|crispy }}
               <input type="hidden" name="next" value="{{ next }}">
               <div class="d-flex justify-content-center btn-block">
-                <button class="btn btn-default">
-                  <input type="submit" class="b1" value="Sign up">
-                </button>
+                <input class="btn btn-primary btn-lg btn-block bg-dark" type="submit" value="{% trans 'SignUpString' %}">
               </div>
             </form>
           </div>
@@ -52,34 +51,17 @@
         <div class="modal-footer">
           <div class="container-fluid">
             <div class="row">
+              {% for provider in oauth_providers %}
               <div class="col-sm">
                 <button type="button" class="btn btn-icon btn-block">
                   <span>
-                    <img src="{% static 'images/google_logo.png' %}" width="40">
+                    {% with '/images/'|add:provider|add:'_logo.png' as img_src %}
+                      <img src="{% static img_src %}" width="40">
+                    {% endwith %}
                   </span>
                 </button>
               </div>
-              <div class="col-sm">
-                <button type="button" class="btn btn-icon btn-block">
-                  <span>
-                    <img src="{% static 'images/github_logo.png' %}" width="40">
-                  </span>
-                </button>
-              </div>
-              <div class="col-sm">
-                <button type="button" class="btn btn-icon btn-block">
-                  <span>
-                    <img src="{% static 'images/vk_logo.png' %}" width="40">
-                  </span>
-                </button>
-              </div>
-              <div class="col-sm">
-                <button type="button" class="btn btn-icon btn-block">
-                  <span>
-                    <img src="{% static 'images/facebook_logo.png' %}" width="40">
-                  </span>
-                </button>
-              </div>
+              {% endfor %}
             </div>
           </div>
         </div>

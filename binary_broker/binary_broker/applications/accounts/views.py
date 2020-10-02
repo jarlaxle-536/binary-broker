@@ -1,14 +1,24 @@
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template import loader
 
 from .models import *
 from .forms import *
 
-def registration_view(request):
-    template = loader.get_template('registration/login.html')
-    context = {'form': RegisterForm()}
-    return HttpResponse(template.render(context, request))
+def login_view(request):
+    print('trying to login')
+    print(f'is ajax: {request.is_ajax()}')
+    print(f'method: {request.method}')
+    if request.method == 'GET':
+        print('and here the modal window comes')
+    elif request.method == 'POST':
+        print('will parse request to get info')
+    return JsonResponse(dict())
+
+def signup_view(request):
+    print('trying to signup')
+    print(f'is ajax: {request.is_ajax()}')
+    return JsonResponse(dict())
 
 def logout_view(request):
     return HttpResponse('Logout page')
