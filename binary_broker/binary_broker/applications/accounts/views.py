@@ -12,3 +12,8 @@ def registration_view(request):
 
 def logout_view(request):
     return HttpResponse('Logout page')
+
+def enter_view(request):
+    template = loader.get_template('registration/enter.html')
+    context = dict()
+    return HttpResponse(template.render(context, request))

@@ -14,14 +14,11 @@
 </li>
 {% else %}
 <li class="nav-item">
-  <a class="nav-link" href="{% url 'login_page' %}">
-    {% trans 'LoginString' %}
-  </a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="{% url 'registration_page' %}">
-    {% trans 'RegisterString' %}
-  </a>
+  <button class="btn btn-primary" data-toggle="modal" data-target="#auth_window">
+    {% trans 'EnterString' %}
+  </button>
 </li>
 {% endif %}
 </ul>
+
+{% include 'navbar/auth_dialog.html' %}
