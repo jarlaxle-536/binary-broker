@@ -1,4 +1,5 @@
 secret_key.txt
+api_secrets.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

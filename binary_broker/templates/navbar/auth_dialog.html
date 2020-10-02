@@ -23,12 +23,30 @@
             </li>
           </ul>
         <!-- Tab panes -->
-        <div class="tab-content">
+        <div class="tab-content" style="height:320px;">
           <div class="tab-pane active container" id="login_form">
-            <h5>Login</h5>
+            <form method="post" novalidate>
+              {% csrf_token %}
+              {{ login_form|crispy }}
+              <input type="hidden" name="next" value="{{ next }}">
+              <div class="d-flex justify-content-center" style="width: 100%;">
+                <button class="btn btn-default">
+                  <input type="submit" class="b1" value="Login">
+                </button>
+              </div>
+            </form>
           </div>
           <div class="tab-pane container" id="register_form">
-            <h5>Sign up</h5>
+            <form method="post" novalidate>
+              {% csrf_token %}
+              {{ signup_form|crispy }}
+              <input type="hidden" name="next" value="{{ next }}">
+              <div class="d-flex justify-content-center btn-block">
+                <button class="btn btn-default">
+                  <input type="submit" class="b1" value="Sign up">
+                </button>
+              </div>
+            </form>
           </div>
         </div>
         <div class="modal-footer">

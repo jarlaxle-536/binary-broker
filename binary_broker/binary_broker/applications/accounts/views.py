@@ -17,3 +17,13 @@ def enter_view(request):
     template = loader.get_template('registration/enter.html')
     context = dict()
     return HttpResponse(template.render(context, request))
+
+def get_login_form(request):
+    print('getting login form')
+    context = {'form': LoginForm()}
+    print(context)
+
+def get_signup_form(request):
+    print('getting signup form')
+    context = {'form': SignUpForm()}
+    print(context)
