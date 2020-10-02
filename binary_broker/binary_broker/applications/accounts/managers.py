@@ -6,22 +6,23 @@ from .exceptions import *
 
 class UserManager(BaseUserManager):
 
-    def _create_general_user(self, email=None, password=None, **info):
+    def _create_general_user(self, email=None, password=None, **extra_fields):
         print(f'Creating general user with email={email} and pw={password}')
         email = self.check_email(email)
         password = self.check_password(password)
-        user = self.model(email=email)
+        user = self.model(email=email, **extra_fields)
         user.set_password(password)
         print(user.__dict__)
         user.save()
+        return user
 
-    def create_user(self, email=None, password=None, **info):
-        info['is_superuser'] = False
-        self._create_general_user(email, password, **info)
+    def create_user(self, email=None, password=None, **extra_fields):
+        extra_fields.setdefault('is_superuser', False)
+        return self._create_general_user(email, password, **extra_fields)
 
-    def create_superuser(self, email=None, password=None, **info):
-        info['is_superuser'] = True
-        self._create_general_user(email, password, **info)
+    def create_superuser(self, email=None, password=None, **extra_fields):
+        extra_fields.setdefault('is_superuser', True)
+        return self._create_general_user(email, password, **extra_fields)
 
     def check_email(self, email):
         if email is None:

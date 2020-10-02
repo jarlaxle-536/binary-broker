@@ -1,5 +1,4 @@
-from django.core.exceptions import ValidationError
-from django.db.utils import IntegrityError
+from django.contrib.auth import authenticate
 from django.test import TestCase
 import faker
 
@@ -8,30 +7,18 @@ from binary_broker.applications.accounts.exceptions import *
 
 class CustomUserAuthTest(TestCase):
 
-    def setUp(self):
-        print('setting up')
-        for info in users:
-            print(info['email'])
-            user = CustomUser.objects.create_user(**info)
-            print('user', user)
+    def test_authenticate_general_user(self):
+        CustomUser.objects.create_user(**user_info)
+        user = authenticate(**user_info)
+        self.assertTrue(user.is_authenticated)
 
-    def test_1(self):
-        pass
-
+    def test_authenticate_superuser(self):
+        CustomUser.objects.create_superuser(**user_info)
+        user = authenticate(**user_info)
+        self.assertTrue(user.is_authenticated)
 
 FAKER = faker.Faker()
-
-users = [
-    {
+user_info = {
         'email': FAKER.email(),
         'password': FAKER.password(),
-        'is_superuser': False,
-    },
-    {
-        'email': FAKER.email(),
-        'password': FAKER.password(),
-        'is_superuser': True
     }
-]
-
-print(users)
