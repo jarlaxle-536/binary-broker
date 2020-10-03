@@ -158,3 +158,7 @@ CACHES = {
         'LOCATION': 'my_cache_table',
     }
 }
+
+# Selenium tests
+
+#TEST_RUNNER = 'django_selenium.selenium_runner.SeleniumTestRunner' 

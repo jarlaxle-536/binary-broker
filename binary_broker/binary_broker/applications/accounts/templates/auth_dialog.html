@@ -21,14 +21,14 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#register_form">
+              <a class="nav-link" data-toggle="tab" href="#signup_form">
                 {% trans 'SignUpString' %}
               </a>
             </li>
           </ul>
         <div class="tab-content" style="height:320px;">
           <div class="tab-pane active container" id="login_form">
-            <form action="{% url 'login' %}" method="post" novalidate>
+            <form action="{% url 'login' %}" method="post">
               {% csrf_token %}
               {{ login_form|crispy }}
               <input type="hidden" name="next" value="{{ next }}">
@@ -37,8 +37,8 @@
               </div>
             </form>
           </div>
-          <div class="tab-pane container" id="register_form" style="height:300px;">
-            <form method="post" novalidate>
+          <div class="tab-pane container" id="signup_form">
+            <form action="{% url 'signup' %}" method="post">
               {% csrf_token %}
               {{ signup_form|crispy }}
               <input type="hidden" name="next" value="{{ next }}">
