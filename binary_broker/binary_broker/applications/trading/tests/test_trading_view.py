@@ -7,4 +7,4 @@ class TradingEnterTest(TestCase):
         response = self.client.get(reverse('commodity_list'), follow=True)
         self.assertEquals(response.status_code, 200)
         target_url, *_ = response.redirect_chain[0][0].split('?next')
-        self.assertEquals(target_url, reverse('login_page'))
+        self.assertEquals(target_url, reverse('login'))

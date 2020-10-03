@@ -33,17 +33,17 @@
               {{ login_form|crispy }}
               <input type="hidden" name="next" value="{{ next }}">
               <div class="d-flex justify-content-center" style="width: 100%;">
-                <input class="btn btn-primary btn-lg btn-block bg-dark" type="submit" value="{% trans 'LoginString' %}">
+                <input class="btn btn-primary btn-lg btn-block bg-dark mt-auto" type="submit" value="{% trans 'LoginString' %}">
               </div>
             </form>
           </div>
-          <div class="tab-pane container" id="register_form">
+          <div class="tab-pane container" id="register_form" style="height:300px;">
             <form method="post" novalidate>
               {% csrf_token %}
               {{ signup_form|crispy }}
               <input type="hidden" name="next" value="{{ next }}">
               <div class="d-flex justify-content-center btn-block">
-                <input class="btn btn-primary btn-lg btn-block bg-dark" type="submit" value="{% trans 'SignUpString' %}">
+                <input class="btn btn-primary btn-lg btn-block bg-dark align-self-end" type="submit" value="{% trans 'SignUpString' %}">
               </div>
             </form>
           </div>

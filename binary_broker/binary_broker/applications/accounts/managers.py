@@ -7,12 +7,10 @@ from .exceptions import *
 class UserManager(BaseUserManager):
 
     def _create_general_user(self, email=None, password=None, **extra_fields):
-        print(f'Creating general user with email={email} and pw={password}')
         email = self.check_email(email)
         password = self.check_password(password)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
-        print(user.__dict__)
         user.save()
         return user
 

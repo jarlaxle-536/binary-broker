@@ -53,6 +53,12 @@ class CustomUserCreationTest(TestCase):
             check_func=lambda result: self.assertTrue(result.is_superuser),
         )
 
+    def test_profile_created(self):
+        self.general_test(
+            fixture={'email': None, 'password': None},
+            check_func=lambda result: self.assertEquals(result, result.profile.user),
+        )
+
 def build_fixture(dct):
     fixture = {k: v if v else valid_fixture.get(k, lambda: None).__call__()
         for k, v in dct.items()}
