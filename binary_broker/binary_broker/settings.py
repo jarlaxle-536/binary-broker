@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+from django.urls import reverse_lazy
 from pathlib import Path
 import json
 import os
@@ -95,6 +96,7 @@ DATABASES = {
 
 # Authentication
 
+LOGIN_URL = reverse_lazy('login')
 AUTH_USER_MODEL = 'accounts.CustomUser'
 with open(os.path.join(BASE_DIR, 'secrets', 'api_secrets.json')) as file:
     API_SECRETS = json.load(file)
@@ -161,4 +163,4 @@ CACHES = {
 
 # Selenium tests
 
-#TEST_RUNNER = 'django_selenium.selenium_runner.SeleniumTestRunner' 
+#TEST_RUNNER = 'django_selenium.selenium_runner.SeleniumTestRunner'
