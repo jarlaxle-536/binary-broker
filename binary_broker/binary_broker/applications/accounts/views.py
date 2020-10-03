@@ -11,35 +11,38 @@ from .forms import *
 def login(request):
     print(f'login with method: {request.method}')
     if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if not form.is_valid():
-            raise ValidationError('Invalid data')
-        user = authenticate(form.cleaned_data)
+        if not request.is_ajax():
+            return JsonResponse(request.POST)
+        user_info = LoginForm(request.POST).clean()
+        user = authenticate(**user_info)
         if user:
             print('authentication success')
         else:
-            print(f'no such user: {form.cleaned_data}')
+            print(f'no such user: {info}')
             print('will stay in this modal window and popup error message')
-        return HttpResponse('login post')
+        return HttpResponse(request)
     else:
         return HttpResponse('login get')
+
+def login(request):
+    print('will initiate ajax request to some handler')
 
 def signup(request):
     print(f'signup with method: {request.method}')
     if request.method == 'POST':
+        print(request.POST)
+#        if not request.is_ajax():
+#            return JsonResponse(request.POST)
         form = SignUpForm(request.POST)
-        if not form.is_valid():
-            raise ValidationError('Invalid data')
-        info = form.cleaned_data
-        if info['password'] != info['password_confirmation']:
-            raise ValidationError('Passwords do not match')
-        else:
-            user_info = {k: v for k, v in info.items() if k in ['email', 'password']}
-            print('passwords do match')
+        if form.is_valid():
+            user_info = {k: v for k, v in form.cleaned_data.items()
+                if k in ['email', 'password']}
             user, created = CustomUser.objects.get_or_create(**user_info)
             print(user.__dict__)
             print('created:', created)
-        return HttpResponse('signup post')
+            return HttpResponse('signup post')
+        else:
+            return HttpResponse(request)
     else:
         return HttpResponse('signup get')
 

@@ -1,22 +1,42 @@
-import django.forms as dj_forms
+from django.utils.translation import gettext_lazy as _
+from django import forms
 
 from .models import CustomUser
 
-class LoginForm(dj_forms.ModelForm):
+class LoginForm(forms.ModelForm):
 
-    email = dj_forms.EmailField()
-    password = dj_forms.CharField()
-
-    class Meta:
-        model = CustomUser
-        fields = ["email", "password"]
-
-class SignUpForm(dj_forms.ModelForm):
-
-    email = dj_forms.EmailField()
-    password = dj_forms.CharField()
-    password_confirmation = dj_forms.CharField()
+    email = forms.EmailField()
+    password = forms.CharField()
 
     class Meta:
         model = CustomUser
-        fields = ["email", "password"]
+        fields = ('email', 'password')
+        labels = {
+            'email': _('EmailString'),
+            'password': _('Password')
+        }
+
+class SignUpForm(forms.ModelForm):
+
+    email = forms.EmailField()
+    password = forms.CharField()
+    password_confirmation = forms.CharField()
+
+    class Meta:
+        model = CustomUser
+        fields = ('email', 'password', 'password_confirmation')
+        labels = {
+            'email': _('EmailString'),
+            'password': _('Password'),
+            'password_confirmation': _('PasswordConfirmation')
+        }
+
+
+    def clean(self):
+#        print(self.__dict__)
+        cleaned_data = super(SignUpForm, self).clean()
+        passwords_match = len(set([cleaned_data.get(k)
+            for k in ('password', 'password_confirmation')])) == 1
+        if not passwords_match:
+            raise forms.ValidationError('passwords do not match')
+        return cleaned_data
