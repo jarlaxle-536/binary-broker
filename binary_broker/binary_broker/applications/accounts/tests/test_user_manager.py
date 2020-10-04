@@ -7,15 +7,16 @@ import faker
 from binary_broker.applications.accounts.models import CustomUser
 from binary_broker.applications.accounts.exceptions import *
 
-class CustomUserCreationTest(TestCase):
+class UserManagerTest(TestCase):
 
-    name = 'creating user tests'
+    """Testing CustomUser manager"""
 
     def general_test(self,
             fixture={'email': None, 'password': None},
             func = CustomUser.objects.create_user,
             exception_catched=None,
             check_func=None):
+        """Template for actual tests"""
         context_manager = (self.assertRaises(exception_catched)
             if exception_catched else contextlib.nullcontext())
         with context_manager:
@@ -57,7 +58,10 @@ class CustomUserCreationTest(TestCase):
         )
 
     def test_profile_created(self):
-        """Profile is created with user creation"""
+        """
+            Profile is created with user creation.
+            Does not involve manager actually, however, it's here. 
+        """
         self.general_test(
             fixture={'email': None, 'password': None},
             check_func=lambda result: self.assertEquals(result, result.profile.user),

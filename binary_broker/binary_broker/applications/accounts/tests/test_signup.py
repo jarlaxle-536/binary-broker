@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from bs4 import BeautifulSoup
 
-class SignupSystemTest(TestCase):
+class SignupTest(TestCase):
 
     def test_signup_form(self):
         "Signup form => signup:post"

@@ -28,17 +28,17 @@
           </ul>
         <div class="tab-content" style="height:320px;">
           <div class="tab-pane active container" id="login_form">
-            <form action="{% url 'login' %}" method="post">
+            <form name="login_form" action="{% url 'login' %}" method="post">
               {% csrf_token %}
               {{ login_form|crispy }}
               <input type="hidden" name="next" value="{{ next }}">
               <div class="d-flex justify-content-center" style="width: 100%;">
-                <input class="btn btn-primary btn-lg btn-block bg-dark mt-auto" type="submit" value="{% trans 'LoginString' %}">
+                <input name="login" class="btn btn-primary btn-lg btn-block bg-dark mt-auto" type="submit" value="{% trans 'LoginString' %}">
               </div>
             </form>
           </div>
           <div class="tab-pane container" id="signup_form">
-            <form action="{% url 'signup' %}" method="post">
+            <form name="signup_form" action="{% url 'signup' %}" method="post">
               {% csrf_token %}
               {{ signup_form|crispy }}
               <input type="hidden" name="next" value="{{ next }}">
@@ -69,3 +69,6 @@
     </div>
   </div>
 </div>
+
+<script src="{% static 'js/login_handler.js' %}">  </script>
+<script src="{% static 'js/login_form_submit.js' %}">  </script>

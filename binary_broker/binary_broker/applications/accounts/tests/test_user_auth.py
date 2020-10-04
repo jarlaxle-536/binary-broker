@@ -5,7 +5,7 @@ import faker
 from binary_broker.applications.accounts.models import CustomUser
 from binary_broker.applications.accounts.exceptions import *
 
-class CustomUserAuthTest(TestCase):
+class UserAuthTest(TestCase):
 
     def test_authenticate_general_user(self):
         """Authenticate GENERAL USER"""

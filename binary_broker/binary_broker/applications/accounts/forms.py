@@ -1,20 +1,37 @@
+from django.contrib.auth.password_validation import validate_password
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
+from django.forms.utils import ErrorList
 from django import forms
 
 from .models import CustomUser
 
-class LoginForm(forms.ModelForm):
+def will_raise(value):
+    print('i will raise')
+    raise ValidationError('bla')
+
+class PasswordField(forms.CharField):
+
+    widget = forms.PasswordInput
+
+    def __init__(self, *args, **kwargs):
+        kwargs['validators'] = [validate_password]
+        print(kwargs)
+        super().__init__(*args, **kwargs)
+
+    def validate(self, value):
+        print(f'validating {self} with {value}.')
+        try:
+            validate_password(value)
+        except ValidationError as exc:
+            res = ValidationError(exc)
+            print(res)
+            raise res
+
+class LoginForm(forms.Form):
 
     email = forms.EmailField()
-    password = forms.CharField()
-
-    class Meta:
-        model = CustomUser
-        fields = ('email', 'password')
-        labels = {
-            'email': _('EmailString'),
-            'password': _('Password')
-        }
+    password = forms.CharField(widget=forms.PasswordInput())
 
 class SignUpForm(forms.ModelForm):
 
@@ -25,12 +42,6 @@ class SignUpForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ('email', 'password', 'password_confirmation')
-        labels = {
-            'email': _('EmailString'),
-            'password': _('Password'),
-            'password_confirmation': _('PasswordConfirmation')
-        }
-
 
     def clean(self):
 #        print(self.__dict__)
