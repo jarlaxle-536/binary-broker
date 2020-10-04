@@ -26,6 +26,8 @@ def login(request):
 
 def login(request):
     print('will initiate ajax request to some handler')
+    template = loader.get_template('main_page.html')
+    return HttpResponse(template.render(dict(), request))
 
 def signup(request):
     print(f'signup with method: {request.method}')
