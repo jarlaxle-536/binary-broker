@@ -36,7 +36,7 @@ class SignUpForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('email', 'password', 'password_confirmation')
+        fields = ('email', 'password')
 
     def clean(self):
         cleaned_data = super(SignUpForm, self).clean()
@@ -51,4 +51,5 @@ class SignUpForm(forms.ModelForm):
             cleaned_data.get('password_confirmation')
         if not passwords_match:
             raise forms.ValidationError('Passwords do not match.')
+        cleaned_data.pop('password_confirmation', None)
         return cleaned_data
