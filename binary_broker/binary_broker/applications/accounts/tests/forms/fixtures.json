@@ -1,0 +1,13 @@
+{
+  "emails": {
+    "invalid": "vasya",
+    "no_match": "zhora@yahoo.com",
+    "match": "vasya@gmail.com"
+  },
+  "passwords": {
+    "empty": "",
+    "too_short": "1",
+    "no_match": "^H1W^Uq%oA",
+    "match": "uG71Q+Ikp+"
+  }
+}

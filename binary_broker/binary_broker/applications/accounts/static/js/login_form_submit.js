@@ -9,7 +9,7 @@ login_form.on('submit', function(event) {
     var data_string = '&csrfmiddlewaretoken=' + csrf_token +
                      '&email=' + email + '&password=' + password;
 
-    console.log(dataString);
+    console.log(data_string);
     event.preventDefault();
     $.ajax({
       url: '/accounts/login/',

@@ -1,35 +1,28 @@
-from django.contrib.auth import decorators, authenticate, logout
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.core.exceptions import ValidationError
+from django.contrib.auth import login, logout
 from django.shortcuts import render
 from django.template import loader
 
+from .auth_backends import AuthBackend
 from .models import *
 from .forms import *
 
-def login(request):
-    if request.method == 'GET':
-        template = loader.get_template('main_page.html')
-        return HttpResponse(template.render(dict(), request))
-    elif request.method == 'POST':
+def login_view(request):
+    print(f'Login:{request.method}, ajax: {request.is_ajax()}')
+    if request.method == 'POST':
         form = LoginForm(request.POST)
-        print('form valid:', form.is_valid())
-        is_form_valid = form.is_valid()
-        if is_form_valid:
-            user_info = form.cleaned_data
-            user = authenticate(request, **user_info)
+        if form.is_valid():
+            user = auth_backend.authenticate(request, **form.cleaned_data)
             if user:
                 login(request, user)
-                print('authentication success')
             else:
-                print(f'no such user: {user_info}')
-                print('will stay in this modal window and user not found message')
-        else:
-            print(form.cleaned_data)
-        template = loader.get_template('main_page.html')
-        return HttpResponse(template.render(dict(), request))
+                "Make additional error messages [password] pop up"
+            "Return data as JsonResponse"
+    template = loader.get_template('main_page.html')
+    return HttpResponse(template.render(dict(), request))
 
-def signup(request):
+def signup_view(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
@@ -44,17 +37,16 @@ def signup(request):
     else:
         return HttpResponse('signup get')
 
-#@decorators.login_required
-def logout(request):
-    print('Calling logout')
-    print('User authenticated:', request.user.is_authenticated)
+def logout_view(request):
     if request.user.is_authenticated:
-        print('LOGGING USER OUT')
         logout(request)
-    template = loader.get_template('main_page.html')
+
+    template = loader.get_template(request.GET['HTTP_REFERER'])
     return HttpResponse(template.render(dict(),))
 
 def enter_view(request):
     template = loader.get_template('registration/enter.html')
     context = dict()
     return HttpResponse(template.render(context, request))
+
+auth_backend = AuthBackend()

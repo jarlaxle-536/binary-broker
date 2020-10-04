@@ -6,7 +6,7 @@ from .models import *
 @receiver(post_save, sender=CustomUser)
 def profile_creation_handler(sender, **kwargs):
     user = kwargs.get('instance', None)
-    profile = Profile.objects.create(user=user)
+    Profile.objects.get_or_create(user=user)
 
 SIGNALS = [
     profile_creation_handler,

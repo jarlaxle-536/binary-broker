@@ -13,41 +13,42 @@ def will_raise(value):
 class PasswordField(forms.CharField):
 
     widget = forms.PasswordInput
-
-    def __init__(self, *args, **kwargs):
-        kwargs['validators'] = [validate_password]
-        print(kwargs)
-        super().__init__(*args, **kwargs)
-
-    def validate(self, value):
-        print(f'validating {self} with {value}.')
-        try:
-            validate_password(value)
-        except ValidationError as exc:
-            res = ValidationError(exc)
-            print(res)
-            raise res
+    default_validators = [validate_password]
 
 class LoginForm(forms.Form):
 
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput())
 
+    def clean_password(self):
+        password = self.cleaned_data['password']
+        try:
+            validate_password(password)
+        except ValidationError as exc:
+            self.add_error('password', exc)
+        return password
+
 class SignUpForm(forms.ModelForm):
 
     email = forms.EmailField()
-    password = forms.CharField()
-    password_confirmation = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput())
+    password_confirmation = forms.CharField(widget=forms.PasswordInput())
 
     class Meta:
         model = CustomUser
         fields = ('email', 'password', 'password_confirmation')
 
     def clean(self):
-#        print(self.__dict__)
         cleaned_data = super(SignUpForm, self).clean()
-        passwords_match = len(set([cleaned_data.get(k)
-            for k in ('password', 'password_confirmation')])) == 1
+        for field in ('password', 'password_confirmation'):
+            value = cleaned_data.get(field)
+            if value:
+                try:
+                    validate_password(cleaned_data.get(field))
+                except ValidationError as exc:
+                    self.add_error(field, exc)
+        passwords_match = cleaned_data.get('password') == \
+            cleaned_data.get('password_confirmation')
         if not passwords_match:
-            raise forms.ValidationError('passwords do not match')
+            raise forms.ValidationError('Passwords do not match.')
         return cleaned_data
