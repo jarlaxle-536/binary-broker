@@ -9,10 +9,11 @@ from .models import *
 from .forms import *
 
 def login(request):
-    print(f'login with method: {request.method}')
-    if request.method == 'POST':
-        if not request.is_ajax():
-            return JsonResponse(request.POST)
+#    request.META['HTTP_REFERER']
+    if request.method == 'GET':
+        template = loader.get_template('main_page.html')
+        return HttpResponse(template.render(dict(), request))
+    elif request.method == 'POST':
         user_info = LoginForm(request.POST).clean()
         user = authenticate(**user_info)
         if user:
@@ -21,18 +22,11 @@ def login(request):
             print(f'no such user: {info}')
             print('will stay in this modal window and popup error message')
         return HttpResponse(request)
-    else:
-        return HttpResponse('login get')
-
-def login(request):
-    print('will initiate ajax request to some handler')
-    template = loader.get_template('main_page.html')
-    return HttpResponse(template.render(dict(), request))
 
 def signup(request):
-    print(f'signup with method: {request.method}')
+#    print(f'signup with method: {request.method}')
     if request.method == 'POST':
-        print(request.POST)
+#        print(request.POST)
 #        if not request.is_ajax():
 #            return JsonResponse(request.POST)
         form = SignUpForm(request.POST)

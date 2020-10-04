@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 class LoginSystemTest(TestCase):
 
     def test_login_form(self):
-        "Make sure that login form points to LOGIN view with POST method"
+        "Login form => login:post"
         response = self.client.get(reverse('main_page'))
         bs_object = BeautifulSoup(response.content, 'html.parser')
         login_form = bs_object.find(
