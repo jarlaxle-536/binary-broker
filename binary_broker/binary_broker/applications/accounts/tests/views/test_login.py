@@ -11,18 +11,19 @@ class LoginViewTest(TestCase):
     def setUp(self):
         self.user_data = get_user_data()
         self.user = CustomUser.objects.create_user(**self.user_data)
+        print('IN DB:', self.user)
 
     def test_login_view_post_match(self):
         "Login:post with user match"
         self.assertEquals(get_user(self.client), AnonymousUser())
-        response = self.client.post(reverse('login'), data=self.user_data)
+        response = self.client.post(reverse('login'), data=self.user_data, follow=True)
         self.assertEquals(response.status_code, 200)
         self.assertEquals(get_user(self.client), self.user)
 
     def test_login_view_post_no_match(self):
         "Login:post with no user match"
         self.assertEquals(get_user(self.client), AnonymousUser())
-        response = self.client.post(reverse('login'), data=get_user_data())
+        response = self.client.post(reverse('login'), data=get_user_data(), follow=True)
         self.assertEquals(response.status_code, 200)
         self.assertEquals(get_user(self.client), AnonymousUser())
 

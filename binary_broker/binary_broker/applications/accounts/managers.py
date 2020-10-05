@@ -7,8 +7,8 @@ from .exceptions import *
 class UserManager(BaseUserManager):
 
     def _create_general_user(self, email=None, password=None, **extra_fields):
-        email = self.check_email(email)
-        password = self.check_password(password)
+        email = self.get_email(email)
+        password = self.get_password(password)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save()
@@ -22,13 +22,13 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
         return self._create_general_user(email, password, **extra_fields)
 
-    def check_email(self, email):
+    def get_email(self, email):
         if email is None:
             raise EmailNotProvided
         validate_email(email)
         return self.normalize_email(email)
 
-    def check_password(self, password):
+    def get_password(self, password):
         if password is None:
             raise PasswordNotProvided
         validate_password(password)

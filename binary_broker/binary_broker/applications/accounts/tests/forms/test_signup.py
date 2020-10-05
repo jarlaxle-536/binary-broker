@@ -31,6 +31,7 @@ class SignupFormTest(TestCase):
         data = USER_DATA.copy()
         for email_k, email_v in emails.items():
             data['email'], errors = email_v, EMAIL_ERRORS[email_k]
+            signup_data = {f'signup_{k}': v for k, v in data.items()}
             bound_form = SignUpForm(data=data)
             self.assertEquals(bound_form.is_valid(), not errors)
             for error in errors:

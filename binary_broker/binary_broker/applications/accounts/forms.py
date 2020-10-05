@@ -6,15 +6,6 @@ from django import forms
 
 from .models import CustomUser
 
-def will_raise(value):
-    print('i will raise')
-    raise ValidationError('bla')
-
-class PasswordField(forms.CharField):
-
-    widget = forms.PasswordInput
-    default_validators = [validate_password]
-
 class LoginForm(forms.Form):
 
     email = forms.EmailField()
