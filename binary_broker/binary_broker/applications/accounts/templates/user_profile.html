@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h4>
+  {{user}} profile
+</h4>
+<p>
+  {{user.profile.demo_account}}
+</p>
+<p>
+  {{user.profile.real_account}}
+</p>
+<p>
+  Some calendar with info on bets done
+</p>
+{% endblock content %}

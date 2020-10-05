@@ -61,11 +61,16 @@ def logout_view(request):
 
 @login_required
 def set_account_type(request):
-    new_account_type = get_profile_account_choice(request.POST['account_type'])
+    new_account_type = Profile.get_account_choice(request.POST['account_type'])
     user_profile = request.user.profile
     user_profile.chosen_account = new_account_type
     user_profile.save()
     print(user_profile.chosen_account)
     return HttpResponse('lorem ipsum')
+
+@login_required
+def user_profile_view(request):
+    template = loader.get_template('user_profile.html')
+    return HttpResponse(template.render(dict(), request))
 
 auth_backend = AuthBackend()
