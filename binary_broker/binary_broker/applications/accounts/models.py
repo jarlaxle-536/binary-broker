@@ -14,17 +14,21 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-    def set_password(self, password):
-        print('setting password')
-        print('raw:', password)
-        print('hashed:', self.password)
-        super().set_password(password)
-
-    def check_password(self, password):
-        print('checking password')
-        print('raw:', password)
-        print('hashed:', self.password)
-        return super().check_password(password)
-
 class Profile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+
+class DemoCashAccount(models.Model):
+    profile = models.OneToOneField(
+        Profile,
+        on_delete=models.CASCADE,
+        related_name='demo_account'
+    )
+    havings = models.FloatField(default=1000)
+
+class RealCashAccount(models.Model):
+    profile = models.OneToOneField(
+        Profile,
+        on_delete=models.CASCADE,
+        related_name='real_account'
+    )
+    havings = models.FloatField(default=0)
