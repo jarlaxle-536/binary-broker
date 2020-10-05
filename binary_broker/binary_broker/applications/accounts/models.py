@@ -18,7 +18,15 @@ class Profile(models.Model):
     ACCOUNT_TYPES = [(v, str(v)) for v in ['Demo', 'Real']]
 
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    chosen_account = models.CharField(max_length=10, choices=ACCOUNT_TYPES, null=False)
+    chosen_account = models.CharField(
+        max_length=20,
+        choices=ACCOUNT_TYPES,
+        default=ACCOUNT_TYPES[0],
+        null=False
+    )
+
+def get_profile_account_choice(val):
+    return [a for a in Profile.ACCOUNT_TYPES if a[0] == val][0]
 
 class DemoCashAccount(models.Model):
     profile = models.OneToOneField(

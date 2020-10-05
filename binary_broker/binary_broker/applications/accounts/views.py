@@ -1,4 +1,5 @@
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
@@ -58,9 +59,13 @@ def logout_view(request):
     template = loader.get_template('main_page.html')
     return HttpResponse(template.render(dict(), request))
 
-def enter_view(request):
-    template = loader.get_template('registration/enter.html')
-    context = dict()
-    return HttpResponse(template.render(context, request))
+@login_required
+def set_account_type(request):
+    new_account_type = get_profile_account_choice(request.POST['account_type'])
+    user_profile = request.user.profile
+    user_profile.chosen_account = new_account_type
+    user_profile.save()
+    print(user_profile.chosen_account)
+    return HttpResponse('lorem ipsum')
 
 auth_backend = AuthBackend()

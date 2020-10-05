@@ -13,6 +13,5 @@ def auth_context_processor(request):
         for p in context['oauth_providers']}
     context['login_form'] = LoginForm()
     context['signup_form'] = SignUpForm()
-    context['account_types'] = Profile.ACCOUNT_TYPES
-    print(context['account_types'])
+    context['account_type_form'] = ProfileAccountTypeForm()
     return context

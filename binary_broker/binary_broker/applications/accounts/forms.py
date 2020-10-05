@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.forms.utils import ErrorList
 from django import forms
 
-from .models import CustomUser
+from .models import CustomUser, Profile
 
 class LoginForm(forms.Form):
 
@@ -44,3 +44,9 @@ class SignUpForm(forms.ModelForm):
             raise forms.ValidationError('Passwords do not match.')
         cleaned_data.pop('password_confirmation', None)
         return cleaned_data
+
+class ProfileAccountTypeForm(forms.ModelForm):
+
+    class Meta:
+        model = Profile
+        fields = ('chosen_account', )
