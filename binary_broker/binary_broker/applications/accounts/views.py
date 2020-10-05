@@ -42,6 +42,7 @@ def signup_view(request):
                 data exists.
             """
             user = CustomUser.objects.create_user(**form.cleaned_data)
+            auth_backend.authenticate(request, **form.cleaned_data)
             login(request, user)
             print(user)
             return redirect(reverse('main_page'))

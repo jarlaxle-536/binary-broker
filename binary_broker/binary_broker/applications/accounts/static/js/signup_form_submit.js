@@ -20,7 +20,7 @@ signup_form.on('submit', function(event) {
       data: data_string,
       success: function(event) {
         $('#auth_window').modal('toggle');
-        location.reload()
+        location.reload();
         console.log('signup form submitted successfully');
       }
     });

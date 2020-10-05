@@ -1,6 +1,7 @@
 from django.conf import settings
 
 from .forms import *
+from .models import Profile
 
 def auth_context_processor(request):
     keys = [
@@ -12,4 +13,6 @@ def auth_context_processor(request):
         for p in context['oauth_providers']}
     context['login_form'] = LoginForm()
     context['signup_form'] = SignUpForm()
+    context['account_types'] = Profile.ACCOUNT_TYPES
+    print(context['account_types'])
     return context

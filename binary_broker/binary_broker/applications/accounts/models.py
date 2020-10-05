@@ -15,7 +15,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
 class Profile(models.Model):
+    ACCOUNT_TYPES = [(v, str(v)) for v in ['Demo', 'Real']]
+
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    chosen_account = models.CharField(max_length=10, choices=ACCOUNT_TYPES, null=False)
 
 class DemoCashAccount(models.Model):
     profile = models.OneToOneField(
