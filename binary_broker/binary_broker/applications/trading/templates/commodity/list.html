@@ -15,10 +15,10 @@
     </tr>
   </thead>
   <tbody>
-    {% for cmd in commodities %}
+    {% for cmd in commodity_list %}
     <tr>
       <td>
-        <a href="{% url 'commodity_detail' cmd.pk %}">
+        <a href="#%}">
           {{cmd.name}}
         </a>
       </td>
@@ -27,6 +27,9 @@
       </td>
       <td>
         {{cmd.mean_price}}
+      </td>
+      <td>
+        some diagram
       </td>
     </tr>
     {% endfor %}

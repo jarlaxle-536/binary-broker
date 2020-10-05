@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'django_celery_results',
+    'django_celery_beat',
+#    'channels',
     'bootstrap4',
     'crispy_forms',
     'simple_history',
@@ -164,3 +166,7 @@ CACHES = {
 # Selenium tests
 
 #TEST_RUNNER = 'django_selenium.selenium_runner.SeleniumTestRunner'
+
+# Channels
+
+#ASGI_APPLICATION = "olympia.routing.application"

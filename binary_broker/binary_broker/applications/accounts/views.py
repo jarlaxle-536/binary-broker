@@ -68,9 +68,15 @@ def set_account_type(request):
     print(user_profile.chosen_account)
     return HttpResponse('lorem ipsum')
 
+def user_profile_detail(request, **kwargs):
+    template = loader.get_template('user_profile_detail.html')
+    profile = Profile.filter(id=kwargs['user_id']).first()
+    context = {'profile': profile}
+    return HttpResponse(template.render(context, request))
+
 @login_required
 def user_profile_view(request):
-    template = loader.get_template('user_profile.html')
+    template = loader.get_template('user_profile_detail.html')
     return HttpResponse(template.render(dict(), request))
 
 auth_backend = AuthBackend()
