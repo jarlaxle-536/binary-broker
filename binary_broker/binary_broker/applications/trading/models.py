@@ -17,8 +17,8 @@ class Commodity(models.Model):
         verbose_name_plural = 'commodities'
 
     name = models.CharField(max_length=50)
-    mean_price = models.FloatField(default=DEFAULT_PRICE)
-    price = models.FloatField(default=DEFAULT_PRICE)
+    mean_price = models.DecimalField(default=DEFAULT_PRICE, max_digits=10, decimal_places=2)
+    price = models.DecimalField(default=DEFAULT_PRICE, max_digits=10, decimal_places=2)
     history = HistoricalRecords()
 
     def get_new_price(self):
@@ -30,7 +30,7 @@ class Commodity(models.Model):
         return price_history
 
     def __str__(self):
-        return self.name
+        return f'{self.name}: {self.price} $'
 
 class Bet(models.Model):
 
@@ -42,7 +42,7 @@ class Bet(models.Model):
 
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     direction = models.BooleanField(choices=DIRECTIONS, null=True)
-    venture = models.FloatField(choices=VENTURES, null=False)
+    venture = models.DecimalField(choices=VENTURES, max_digits=10, decimal_places=2, null=False)
     duration = TimedeltaField(choices=DURATIONS, null=False)
     time_start = models.TimeField(auto_now_add=True)
 

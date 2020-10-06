@@ -36,7 +36,7 @@ class DemoCashAccount(models.Model):
         on_delete=models.CASCADE,
         related_name='demo_account'
     )
-    havings = models.FloatField(default=1000)
+    havings = models.DecimalField(default=1000, max_digits=10, decimal_places=2)
 
     def __str__(self):
         return f'Demo account: {self.havings} $'
@@ -47,7 +47,7 @@ class RealCashAccount(models.Model):
         on_delete=models.CASCADE,
         related_name='real_account'
     )
-    havings = models.FloatField(default=0)
+    havings = models.DecimalField(default=0, max_digits=10, decimal_places=2)
 
     def __str__(self):
         return f'Real account: {self.havings} $'

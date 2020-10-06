@@ -77,7 +77,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'binary_broker.applications.accounts.context_processors.auth_context_processor'
+                'binary_broker.applications.accounts.context_processors.auth_context_processor',
+                'binary_broker.applications.trading.context_processors.trading_context_processor',
             ],
         },
     },
