@@ -1,6 +1,7 @@
 from django.db import models
 from simple_history.models import HistoricalRecords
 import datetime
+import decimal
 import random
 
 from binary_broker.applications.accounts.models import CustomUser
@@ -22,7 +23,7 @@ class Commodity(models.Model):
     history = HistoricalRecords()
 
     def get_new_price(self):
-        return self.price + 0.05 * random.choice([-1, 1])
+        return self.price + decimal.Decimal(0.05 * random.choice([-1, 1]))
 
     def get_price_history(self):
         history_entries = self.history.all().order_by('history_date')

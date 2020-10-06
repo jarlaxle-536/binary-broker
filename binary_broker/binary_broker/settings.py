@@ -171,3 +171,9 @@ CACHES = {
 # Channels
 
 ASGI_APPLICATION = "binary_broker.channel_routing.application"
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
