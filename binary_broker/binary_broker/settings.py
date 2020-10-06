@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_celery_results',
     'django_celery_beat',
-#    'channels',
+    'channels',
     'bootstrap4',
     'crispy_forms',
     'simple_history',
@@ -169,4 +169,4 @@ CACHES = {
 
 # Channels
 
-#ASGI_APPLICATION = "olympia.routing.application"
+ASGI_APPLICATION = "binary_broker.channel_routing.application"
