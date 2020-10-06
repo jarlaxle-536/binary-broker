@@ -1,6 +1,6 @@
 from django.urls import get_resolver
 from django.test import TestCase
-from django.urls import reverse
+from django.urls import reverse, exceptions
 from bs4 import BeautifulSoup
 
 class AppTest(TestCase):
@@ -10,5 +10,8 @@ class AppTest(TestCase):
         paths = [p for p in get_resolver().reverse_dict.keys()
             if type(p) == str]
         for path in paths:
-            response = self.client.get(reverse(path))
-            self.assertIn(response.status_code, (200, 302))
+            try:
+                response = self.client.get(reverse(path))
+                self.assertIn(response.status_code, (200, 302))
+            except exceptions.NoReverseMatch as exc:
+                print(exc)

@@ -4,7 +4,13 @@ import datetime
 import decimal
 import random
 
-from binary_broker.applications.accounts.models import CustomUser
+from binary_broker.applications.accounts.models import *
+
+DEFAULT_NUMERIC_SETTINGS = {
+    'max_digits': 10,
+    'decimal_places': 2
+}
+
 
 class TimedeltaField(models.IntegerField):
     def __str__(self):
@@ -12,14 +18,12 @@ class TimedeltaField(models.IntegerField):
 
 class Commodity(models.Model):
 
-    DEFAULT_PRICE = 10.0
-
     class Meta:
         verbose_name_plural = 'commodities'
 
     name = models.CharField(max_length=50)
-    mean_price = models.DecimalField(default=DEFAULT_PRICE, max_digits=10, decimal_places=2)
-    price = models.DecimalField(default=DEFAULT_PRICE, max_digits=10, decimal_places=2)
+    mean_price = models.DecimalField(default=10, **DEFAULT_NUMERIC_SETTINGS)
+    price = models.DecimalField(default=10, **DEFAULT_NUMERIC_SETTINGS)
     history = HistoricalRecords()
 
     def get_new_price(self):
@@ -36,16 +40,33 @@ class Commodity(models.Model):
 class Bet(models.Model):
 
     DIRECTIONS = [(True, 'up'), (False, 'down')]
+    IS_REAL = [(True, 'yes'), (False, 'no')]
     DURATIONS = [(v, str(v))
         for v in [10, 30, 60, 120]]
     VENTURES = [(v, str(v))
         for v in [1, 2, 5, 10, 20, 50, 100]]
 
-    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    commodity = models.ForeignKey(Commodity, on_delete=models.CASCADE)
+    owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    is_real_account = models.BooleanField(
+        choices=IS_REAL,
+        null=True,
+        default=False
+    )
     direction = models.BooleanField(choices=DIRECTIONS, null=True)
-    venture = models.DecimalField(choices=VENTURES, max_digits=10, decimal_places=2, null=False)
+    venture = models.DecimalField(
+        choices=VENTURES,
+        null=False,
+        **DEFAULT_NUMERIC_SETTINGS
+    )
     duration = TimedeltaField(choices=DURATIONS, null=False)
     time_start = models.TimeField(auto_now_add=True)
 
     def time_finish(self):
         return self.time_start + self.duration
+
+    @property
+    def account(self):
+        profile = self.owner
+        return getattr(profile, 'real_account' if self.is_real_account
+            else 'demo_account')

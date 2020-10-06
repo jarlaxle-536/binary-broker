@@ -33,24 +33,40 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user}'
 
-class DemoCashAccount(models.Model):
+class CashAccount(models.Model):
+
+    profile_args, profile_kwargs = (Profile, ), {'on_delete': models.CASCADE}
+    havings_settings = {'max_digits': 10, 'decimal_places': 2}
+
+    class Meta:
+        abstract = True
+
+class DemoCashAccount(CashAccount):
+
     profile = models.OneToOneField(
-        Profile,
-        on_delete=models.CASCADE,
+        *CashAccount.profile_args,
+        **CashAccount.profile_kwargs,
         related_name='demo_account'
     )
-    havings = models.DecimalField(default=1000, max_digits=10, decimal_places=2)
+    havings = models.DecimalField(
+        **CashAccount.havings_settings,
+        default=1000
+    )
 
     def __str__(self):
         return f'Demo account: {self.havings} $'
 
-class RealCashAccount(models.Model):
+class RealCashAccount(CashAccount):
+
     profile = models.OneToOneField(
-        Profile,
-        on_delete=models.CASCADE,
+        *CashAccount.profile_args,
+        **CashAccount.profile_kwargs,
         related_name='real_account'
     )
-    havings = models.DecimalField(default=0, max_digits=10, decimal_places=2)
+    havings = models.DecimalField(
+        **CashAccount.havings_settings,
+        default=0
+    )
 
     def __str__(self):
         return f'Real account: {self.havings} $'
