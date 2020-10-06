@@ -151,6 +151,16 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Celery
 
+# Channels
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
+
+ASGI_APPLICATION = "binary_broker.channel_routing.application"
+
 # CELERY
 
 CELERY_BROKER_URL = 'amqp://localhost'
@@ -167,13 +177,3 @@ CACHES = {
 # Selenium tests
 
 #TEST_RUNNER = 'django_selenium.selenium_runner.SeleniumTestRunner'
-
-# Channels
-
-ASGI_APPLICATION = "binary_broker.channel_routing.application"
-
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-    },
-}
