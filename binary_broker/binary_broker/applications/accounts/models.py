@@ -30,6 +30,9 @@ class Profile(models.Model):
     def get_account_choice(cls, val):
         return [a for a in cls.ACCOUNT_TYPES if a[0] == val][0]
 
+    def __str__(self):
+        return f'{self.user}'
+
 class DemoCashAccount(models.Model):
     profile = models.OneToOneField(
         Profile,

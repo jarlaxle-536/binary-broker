@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block content %}
+
+<div class="container-fluid h-50 overflow-auto" style="height: 100px;"">
+  <div class="row h-75">
+    <div class="col-12 col-md-2 p-0 bg-dark">
+      {% include 'user_profile_navbar.html' %}
+    </div>
+    <div class="col-sm">
+      {% block app_content %}
+      {% endblock app_content %}    </div>
+  </div>
+
+{% endblock content %}

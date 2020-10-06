@@ -14,4 +14,8 @@ def auth_context_processor(request):
     context['login_form'] = LoginForm()
     context['signup_form'] = SignUpForm()
     context['account_type_form'] = ProfileAccountTypeForm()
+    if 'profile' in request.path:
+        profile_id = (lambda s: int(s) if s else request.user.profile.id)(
+            request.path.split('profile/')[1].split('/')[0])
+        context['profile'] = Profile.objects.filter(id=profile_id).first()
     return context
