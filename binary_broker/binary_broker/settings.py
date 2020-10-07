@@ -149,13 +149,21 @@ STATICFILES_DIRS = [
 # Styles, forms, etc
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# Celery
+# Redis
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+BROKER_VHOST = '0'
+REDIS_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 
 # Channels
 
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(REDIS_HOST, REDIS_PORT)],
+        },
     },
 }
 
@@ -163,17 +171,25 @@ ASGI_APPLICATION = "binary_broker.channel_routing.application"
 
 # CELERY
 
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+
 CELERY_BROKER_URL = 'amqp://localhost'
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_CACHE_BACKEND = 'django-cache'
-CELERY_CACHE_BACKEND = 'default'
+CELERY_CACHE_BACKEND = 'redis'
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
         'LOCATION': 'my_cache_table',
+    },
+    'redis': {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(REDIS_HOST, REDIS_PORT)],
+        },
     }
 }
-
-# Selenium tests
-
-#TEST_RUNNER = 'django_selenium.selenium_runner.SeleniumTestRunner'

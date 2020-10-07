@@ -8,8 +8,8 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'binary_broker.settings')
 app = Celery('binary_broker')
 
 app.config_from_object('django.conf:settings')
+app.conf.broker_url = 'redis://localhost:6379/0'
 app.autodiscover_tasks()
-app.loader.override_backends['django-db'] = 'django_celery_results.backends.database:DatabaseBackend'
 
 app.conf.update(
     CELERYBEAT_SCHEDULE = {
