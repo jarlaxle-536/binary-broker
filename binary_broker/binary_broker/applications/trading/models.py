@@ -34,6 +34,11 @@ class Commodity(models.Model):
         price_history = [(e.history_date, e.price) for e in history_entries]
         return price_history
 
+    def get_current_direction(self):
+        price_history = self.get_price_history()
+        pr1, pr2 = [i[1] for i in price_history[-2:]]
+        return 1 if pr1 < pr2 else 0 if pr1 == pr2 else -1
+
     def __str__(self):
         return f'{self.name}: {self.price} $'
 

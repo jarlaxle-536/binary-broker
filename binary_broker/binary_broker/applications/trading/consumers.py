@@ -23,5 +23,4 @@ class TradingConsumer(WebsocketConsumer):
     def trading_update_prices(self, event):
         print(f'trading:update_prices with {event}')
         prices_dict = {cmd.pk: cmd.price for cmd in Commodity.objects.all()}
-        print(prices_dict)
-        self.send(text_data='hello world')
+        self.send(text_data='whatever')

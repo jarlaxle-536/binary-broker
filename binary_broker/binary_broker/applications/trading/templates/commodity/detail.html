@@ -4,29 +4,10 @@
 
 {% block app_content %}
 <h4>
-  Showing detail for {{commodity}}
+  Showing detail for {{commodity.name}}
 </h4>
 <div id="target_div">
 </div>
-<script>
-  console.log(window.location.host);
-  var socket = new WebSocket('ws://' + window.location.host + '/trading/');
 
-  socket.onopen = function open() {
-    console.log('WebSockets connection created.');
-  };
-
-  socket.onmessage = function(e) {
-//    console.log("received message");
-//    console.log('data: ' + e['data']);
-    var div = document.getElementById('target_div');
-    div.innerHTML += '<p>' + e['data'] + '</p>';
-    update_commodities_list();
-  };
-
-  if (socket.readyState == WebSocket.OPEN) {
-    socket.onopen();
-  };
-</script>
 <script src="{% static 'js/websocket_test.js' %}">  </script>
 {% endblock app_content %}
