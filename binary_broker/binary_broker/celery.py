@@ -17,5 +17,9 @@ app.conf.update(
             'task': 'binary_broker.applications.trading.tasks.alter_prices',
             'schedule': datetime.timedelta(seconds=5)
         },
+        'update_trading': {
+            'task': 'binary_broker.applications.trading.tasks.update_trading',
+            'schedule': datetime.timedelta(seconds=5)
+        },
     }
 )

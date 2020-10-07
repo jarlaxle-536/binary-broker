@@ -20,7 +20,7 @@ class TradingConsumer(WebsocketConsumer):
         async_to_sync(self.channel_layer.group_discard)(
             self.group_name, self.channel_name)
 
-    def trading_update_prices(self, event):
-        print(f'trading:update_prices with {event}')
+    def trading_update_all(self, event):
+        print(f'trading:update_all with {event}')
         prices_dict = {cmd.pk: cmd.price for cmd in Commodity.objects.all()}
         self.send(text_data='whatever')

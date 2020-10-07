@@ -3,6 +3,7 @@ from simple_history.models import HistoricalRecords
 import datetime
 import decimal
 import random
+import pytz
 
 from binary_broker.applications.accounts.models import *
 
@@ -33,6 +34,20 @@ class Commodity(models.Model):
         history_entries = self.history.all().order_by('history_date')
         price_history = [(e.history_date, e.price) for e in history_entries]
         return price_history
+
+    def get_last_records(self, timedelta):
+        utc = pytz.UTC
+        all_historical_entries = self.get_price_history()
+        current_time = utc.localize(datetime.datetime.utcnow())
+        min_time = current_time - timedelta
+        """
+            do binary search for latest i'th element with invalid time,
+            create queue of all records from i (incl.) to the last one,
+            update this queue every time
+        """
+        for ind in range(len(all_historical_entries)):
+            if all_historical_entries[ind][0] >= min_time: break
+        return all_historical_entries[ind:]
 
     def get_current_direction(self):
         price_history = self.get_price_history()
