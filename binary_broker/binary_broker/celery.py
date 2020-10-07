@@ -15,11 +15,11 @@ app.conf.update(
     CELERYBEAT_SCHEDULE = {
         'alter_prices': {
             'task': 'binary_broker.applications.trading.tasks.alter_prices',
-            'schedule': datetime.timedelta(seconds=5)
+            'schedule': settings.GLOBAL_UPDATE_PERIOD
         },
         'update_trading': {
             'task': 'binary_broker.applications.trading.tasks.update_trading',
-            'schedule': datetime.timedelta(seconds=5)
+            'schedule': settings.GLOBAL_UPDATE_PERIOD
         },
     }
 )

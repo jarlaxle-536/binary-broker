@@ -1,5 +1,6 @@
 from django.db import models
 from simple_history.models import HistoricalRecords
+from django.conf import settings
 import datetime
 import decimal
 import random
@@ -11,7 +12,6 @@ DEFAULT_NUMERIC_SETTINGS = {
     'max_digits': 10,
     'decimal_places': 2
 }
-
 
 class TimedeltaField(models.IntegerField):
     def __str__(self):
@@ -47,7 +47,13 @@ class Commodity(models.Model):
         """
         for ind in range(len(all_historical_entries)):
             if all_historical_entries[ind][0] >= min_time: break
-        return all_historical_entries[ind:]
+        last_entries = all_historical_entries[ind:]
+        while True:
+            last = list(last_entries[-1])
+            last[0] += settings.GLOBAL_UPDATE_PERIOD
+            if last[0] >= current_time: break
+            last_entries += [tuple(last)]
+        return last_entries
 
     def get_current_direction(self):
         price_history = self.get_price_history()

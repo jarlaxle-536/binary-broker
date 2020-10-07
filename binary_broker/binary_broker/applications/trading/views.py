@@ -6,12 +6,15 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import loader
 from django.urls import reverse
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
 
 from rest_framework.response import Response
 
 import json
 
 from .serializers import *
+from .auxiliary import *
 from .models import *
 
 class CommodityListView(ListView):
@@ -67,6 +70,13 @@ class CommodityDetailView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
+        data = kwargs['object'].get_last_records(
+            datetime.timedelta(seconds=60))
+        context['min_x'] = 0
+        context['width'] = 100
+        context['min_y'] = 0
+        context['height'] = 100
+        context['plot_points'] = get_plot_points_from_data(data)
         return context
 
 def websocket_test(request):

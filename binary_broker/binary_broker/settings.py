@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from django.urls import reverse_lazy
 from pathlib import Path
+import datetime
 import json
 import os
 
@@ -202,3 +203,7 @@ CACHES = {
         },
     }
 }
+
+# Custom
+
+GLOBAL_UPDATE_PERIOD = datetime.timedelta(seconds=5)
