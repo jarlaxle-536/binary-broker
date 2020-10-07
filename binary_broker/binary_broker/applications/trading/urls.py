@@ -4,6 +4,19 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('', login_required(CommodityListView.as_view()), name='commodity_list'),
-    path('commodity/<int:pk>', login_required(CommodityDetailView.as_view()), name='commodity_detail')
+    path(
+        '',
+        login_required(CommodityListView.as_view()),
+        name='commodity_list'
+    ),
+    path(
+        'commodity/<int:pk>',
+        login_required(CommodityDetailView.as_view()),
+        name='commodity_detail'
+    ),
+    path(
+        'ajax/websocket_test',
+        websocket_test,
+        name='ws_test'    
+    ),
 ]

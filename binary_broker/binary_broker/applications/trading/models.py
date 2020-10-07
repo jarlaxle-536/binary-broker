@@ -41,10 +41,8 @@ class Bet(models.Model):
 
     DIRECTIONS = [(True, 'up'), (False, 'down')]
     IS_REAL = [(True, 'yes'), (False, 'no')]
-    DURATIONS = [(v, str(v))
-        for v in [10, 30, 60, 120]]
-    VENTURES = [(v, str(v))
-        for v in [1, 2, 5, 10, 20, 50, 100]]
+    DURATIONS = [(v, str(v)) for v in [10, 30, 60, 120]]
+    VENTURES = [(v, str(v)) for v in [1, 2, 5, 10, 20, 50, 100]]
 
     commodity = models.ForeignKey(Commodity, on_delete=models.CASCADE)
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE)

@@ -1,9 +1,14 @@
 {% extends 'base_trading.html' %}
 
+{% load static %}
+
 {% block app_content %}
 <h4>
   Showing detail for {{commodity}}
 </h4>
+<button id='ws_test'>
+  Send smth
+</button>
 <script>
   console.log(window.location.host);
   var socket = new WebSocket('ws://' + window.location.host + '/trading/');
@@ -20,6 +25,6 @@
   if (socket.readyState == WebSocket.OPEN) {
     socket.onopen();
   };
-
 </script>
+<script src="{% static 'js/websocket_test.js' %}">  </script>
 {% endblock app_content %}

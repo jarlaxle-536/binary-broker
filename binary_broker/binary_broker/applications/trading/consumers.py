@@ -4,37 +4,29 @@ from asgiref.sync import async_to_sync
 import asyncio
 import json
 
+from .tasks import *
+
 class TradingConsumer(WebsocketConsumer):
 
     group_name = 'trading'
 
     def connect(self):
-
-        self.channel_layer = get_channel_layer()
-        async_to_sync(self.channel_layer.group_add)(
-            self.group_name,
-            self.channel_name
-        )
-        print('channel layer after connect:', self.channel_layer.__dict__)
         self.accept()
-        self.send(text_data='RECEIVED')
-
-    def receive(self, text_data=None, bytes_data=None):
-        print('triggered RECEIVE')
-        self.send(text_data="Hello world!")
+        print(self.group_name)
+        print(channel_layer)
+        async_to_sync(self.channel_layer.group_add)(
+            self.group_name, self.channel_name)
+        self.send(text_data='Websocket connection')
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(
-            self.group_name,
-            self.channel_name
-        )
-        self.close()
+            self.group_name, self.channel_name)
 
     def trading_do(self, event):
         print('trading do')
-        self.send_json(
-            {
-                'type': 'trading.do',
-                'text': event['content']
-            }
-        )
+        self.send(text_data='hello world')
+#            {
+#                'type': 'trading.do',
+#                'text': event['content']
+#            }
+#        )
