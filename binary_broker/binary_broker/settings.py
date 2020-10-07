@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'django_extensions',
     'django_celery_results',
     'django_celery_beat',
@@ -148,6 +149,14 @@ STATICFILES_DIRS = [
 
 # Styles, forms, etc
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# REST Framework
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+}
 
 # Redis
 

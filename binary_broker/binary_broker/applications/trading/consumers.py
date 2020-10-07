@@ -4,16 +4,14 @@ from asgiref.sync import async_to_sync
 import asyncio
 import json
 
+from .models import *
+
 class TradingConsumer(WebsocketConsumer):
 
     group_name = 'trading'
 
     def connect(self):
-        global channel_layer1
-        channel_layer1 = self.channel_layer
         self.accept()
-        print(self.group_name)
-        print(self.channel_layer)
         async_to_sync(self.channel_layer.group_add)(
             self.group_name, self.channel_name)
         self.send(text_data='Websocket connection')
@@ -22,8 +20,8 @@ class TradingConsumer(WebsocketConsumer):
         async_to_sync(self.channel_layer.group_discard)(
             self.group_name, self.channel_name)
 
-    def trading_do(self, event):
-        print('trading do')
+    def trading_update_prices(self, event):
+        print(f'trading:update_prices with {event}')
+        prices_dict = {cmd.pk: cmd.price for cmd in Commodity.objects.all()}
+        print(prices_dict)
         self.send(text_data='hello world')
-
-channel_layer1 = get_channel_layer()

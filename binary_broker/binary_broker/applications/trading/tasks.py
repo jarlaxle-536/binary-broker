@@ -15,13 +15,14 @@ def do_smth():
 
 @app.task
 def alter_prices():
-    text = 'lorem  ipsum'
     channel_layer = get_channel_layer()
-    print(channel_layer, channel_layer1)
-    print(channel_layer.__dict__)
+    commodities = Commodity.objects.all()
+    for cmd in commodities:
+        cmd.price = cmd.get_new_price()
+        cmd.save()
     async_to_sync(channel_layer.group_send)(
         'trading', {
-            'type': "trading.do",
-            'text': json.dumps(text)
+            'type': 'trading.update_prices',
+            'text': 'updated'
         }
     )

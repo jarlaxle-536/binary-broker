@@ -15,8 +15,9 @@ urlpatterns = [
         name='commodity_detail'
     ),
     path(
-        'ajax/websocket_test',
-        websocket_test,
-        name='ws_test'    
+        'commodity/update',
+        CommodityPartialUpdateView.as_view(),
+        name='commodity_update'
     ),
+#    path('ajax/websocket_test', websocket_test, name='ws_test'),
 ]

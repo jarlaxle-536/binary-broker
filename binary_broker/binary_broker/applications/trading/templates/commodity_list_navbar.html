@@ -5,7 +5,7 @@
   Commodities
 </h4>
 
-<ul class="flex-md-column flex-row navbar-nav w-100 ">
+<ul class="flex-md-column flex-row navbar-nav w-100" id="commodity_list_ul">
   {% for cmd in commodity_list %}
     <li class="nav-item">
       <a class="nav-link pl-0" href="{% url 'commodity_detail' cmd.pk %}">

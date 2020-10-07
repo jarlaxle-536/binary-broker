@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
 <div class="container-fluid h-100 overflow-auto" style="height: 100px;"">
   <div class="row h-75">
@@ -17,4 +19,8 @@
     </div>
   </div>
 </div>
+
+<script src="{% static 'js/commodity_list_navbar_update.js' %}">
+</script>
+
 {% endblock content %}
