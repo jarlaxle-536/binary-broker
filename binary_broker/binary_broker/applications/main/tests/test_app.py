@@ -11,7 +11,8 @@ class AppTest(TestCase):
             if type(p) == str]
         for path in paths:
             try:
+                print(path)
                 response = self.client.get(reverse(path))
                 self.assertIn(response.status_code, (200, 302))
-            except exceptions.NoReverseMatch as exc:
+            except Exception as exc:
                 print(exc)

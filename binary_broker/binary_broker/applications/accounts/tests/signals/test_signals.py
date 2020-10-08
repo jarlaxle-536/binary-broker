@@ -7,9 +7,9 @@ import faker
 from binary_broker.applications.accounts.models import CustomUser
 from binary_broker.applications.accounts.exceptions import *
 
-class UserManagerTest(TestCase):
+class UserSignalsTest(TestCase):
 
-    """Testing CustomUser manager"""
+    """Testing user signals"""
 
     def general_test(self,
             fixture={'email': None, 'password': None},
@@ -31,7 +31,8 @@ class UserManagerTest(TestCase):
         """
         self.general_test(
             fixture={'email': None, 'password': None},
-            check_func=lambda result: self.assertEquals(result, result.profile.user),
+            check_func=lambda result:
+                self.assertEquals(result, result.profile.user),
         )
 
     def test_cash_accounts_created(self):

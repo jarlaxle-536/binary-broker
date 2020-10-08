@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django_celery_results',
     'django_celery_beat',
     'channels',
+    'channels_redis',
     'bootstrap4',
     'crispy_forms',
     'simple_history',
@@ -162,7 +163,7 @@ REST_FRAMEWORK = {
 # Redis
 
 REDIS_HOST = 'localhost'
-REDIS_PORT = 6379
+REDIS_PORT = '6379'
 BROKER_VHOST = '0'
 REDIS_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 
@@ -189,7 +190,6 @@ CELERY_TASK_SERIALIZER = 'json'
 
 CELERY_BROKER_URL = 'amqp://localhost'
 CELERY_RESULT_BACKEND = 'django-db'
-CELERY_CACHE_BACKEND = 'django-cache'
 CELERY_CACHE_BACKEND = 'redis'
 CACHES = {
     'default': {
@@ -197,10 +197,11 @@ CACHES = {
         'LOCATION': 'my_cache_table',
     },
     'redis': {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [(REDIS_HOST, REDIS_PORT)],
-        },
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': REDIS_URL,
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
     }
 }
 
