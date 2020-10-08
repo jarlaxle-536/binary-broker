@@ -13,10 +13,6 @@ DEFAULT_NUMERIC_SETTINGS = {
     'decimal_places': 2
 }
 
-class TimedeltaField(models.IntegerField):
-    def __str__(self):
-        return str(datetime.timedelta(seconds=self))
-
 class Commodity(models.Model):
 
     class Meta:
@@ -83,7 +79,7 @@ class Bet(models.Model):
         null=False,
         **DEFAULT_NUMERIC_SETTINGS
     )
-    duration = TimedeltaField(choices=DURATIONS, null=False)
+    duration = models.IntegerField(choices=DURATIONS, null=False)
     time_start = models.TimeField(auto_now_add=True)
 
     def time_finish(self):
