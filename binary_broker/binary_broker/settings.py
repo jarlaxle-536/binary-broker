@@ -65,6 +65,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'binary_broker.applications.main.middlewares.settings_middleware',
 ]
 
 ROOT_URLCONF = 'binary_broker.urls'
@@ -80,8 +82,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n',
                 'binary_broker.applications.accounts.context_processors.auth_context_processor',
                 'binary_broker.applications.trading.context_processors.trading_context_processor',
+                'binary_broker.applications.main.context_processors.global_settings_processor'
             ],
         },
     },
@@ -130,15 +134,17 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
-
+LANGUAGES = (
+    ('en-us', 'English'),
+    ('ru', 'Russian'),
+)
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale/'),
+)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/

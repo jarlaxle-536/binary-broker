@@ -1,15 +1,21 @@
 {% load i18n %}
 
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+
 <ul class="navbar-nav justify-content-center not-impl">
   <div class="dropdown">
   <li class="nav-item">
     <button class="btn btn-dark btn-lg dropdown-toggle nav-link text-white" type="button" id="language_menu_btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      {% trans 'LanguageDropdownBtn' %}
+      {% trans 'LanguageString' %}: {{LANGUAGE_CODE}}
     </button>
     <div class="dropdown-menu" style="width: 100%;" aria-labelledby="language_menu_btn">
-      <a class="dropdown-item" href="#">Action</a>
-      <a class="dropdown-item" href="#">Another action</a>
-      <a class="dropdown-item" href="#">Something else here</a>
+      {% for language in languages %}
+        <a class="dropdown-item" href="{% url 'set_language' forloop.counter0 %}">
+          {{language.name}}
+        </a>
+      {% endfor %}
     </div>
   </li>
   </div>
