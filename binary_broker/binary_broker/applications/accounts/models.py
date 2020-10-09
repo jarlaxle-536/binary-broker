@@ -1,5 +1,6 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
+from django_countries.fields import CountryField
 from django.db import models
 
 from .managers import UserManager
@@ -8,17 +9,29 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
+    is_bot = models.BooleanField(default=False)
 
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
+class Bot(CustomUser):
+
+    class Meta:
+        proxy = True
+
+    def trade(self):
+        'will choose commodity, account type, bet venture and make a bet'
+
 class Profile(models.Model):
 
     ACCOUNT_TYPES = [(v, str(v)) for v in ['Demo', 'Real']]
 
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=50, null=True, blank=True)
+    last_name = models.CharField(max_length=50, null=True, blank=True)
+    country = CountryField(null=True, blank=True)
     chosen_account = models.CharField(
         max_length=20,
         choices=ACCOUNT_TYPES,
