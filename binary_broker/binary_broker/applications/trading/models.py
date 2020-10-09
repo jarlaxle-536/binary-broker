@@ -43,12 +43,13 @@ class Commodity(models.Model):
         """
         for ind in range(len(all_historical_entries)):
             if all_historical_entries[ind][0] >= min_time: break
-        last_entries = all_historical_entries[ind:]
+        last_entries = list(map(list, all_historical_entries[ind:]))
+        last_entries[-1][0] =min_time
         while True:
             last = list(last_entries[-1])
             last[0] += settings.GLOBAL_UPDATE_PERIOD
             if last[0] >= current_time: break
-            last_entries += [tuple(last)]
+            last_entries += [last[:]]
         return last_entries
 
     def get_current_direction(self):

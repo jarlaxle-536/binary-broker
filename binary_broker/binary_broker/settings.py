@@ -140,17 +140,15 @@ TIME_ZONE = 'UTC'
 
 LANGUAGE_CODE = 'en-us'
 LANGUAGES = (
-    ('en-us', 'English'),
-    ('fr', 'French'),
-    ('de', 'German'),
-    ('es', 'Spanish'),
-    ('ru', 'Russian'),
+    ('en-us',   'English'),
+    ('fr',      'French'),
+    ('de',      'German'),
+    ('es',      'Spanish'),
+    ('ru',      'Russian'),
 )
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale/'),
 )
-
-print(LOCALE_PATHS)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/

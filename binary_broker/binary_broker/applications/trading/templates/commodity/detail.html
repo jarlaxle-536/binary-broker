@@ -3,19 +3,15 @@
 {% load static %}
 
 {% block app_content %}
-<div id="plot_div">
-  <svg viewBox="0 {{min_y}} 100 {{height}}" class="chart">
-  <polyline
-     fill="none"
-     stroke="#0074d9"
-     stroke-width="3"
-     points="{{plot_points}}">
-  </svg>
+
+<div id="price_plot">
+{% autoescape off %}
+{{ price_plot }}
+{% endautoescape %}
 </div>
 
-<div id="prices_table_div">
-  
-</div>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 <script src="{% static 'js/websocket_test.js' %}">  </script>
+
 {% endblock app_content %}

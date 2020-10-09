@@ -8,8 +8,16 @@ from .models import CustomUser, Profile
 
 class LoginForm(forms.Form):
 
-    email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput())
+    email = forms.EmailField(localize=True)
+    password = forms.CharField(widget=forms.PasswordInput(), localize=True)
+
+    localized_fields = ('email', 'password')
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        for field in self.fields.values():
+#            field.localize = field.widget.is_localized = True
+            print(field.__dict__)
 
     def clean_password(self):
         password = self.cleaned_data['password']

@@ -6,8 +6,9 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import loader
 from django.urls import reverse
-import matplotlib.dates as mdates
-import matplotlib.pyplot as plt
+
+from plotly.graph_objs import Scatter
+from plotly.offline import plot
 
 from rest_framework.response import Response
 
@@ -70,13 +71,15 @@ class CommodityDetailView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        data = kwargs['object'].get_last_records(
+        price_history = kwargs['object'].get_last_records(
             datetime.timedelta(seconds=60))
-        context['min_x'] = 0
-        context['width'] = 100
-        context['min_y'] = 0
-        context['height'] = 100
-        context['plot_points'] = get_plot_points_from_data(data)
+        context['price_plot'] = plot([Scatter(
+            x=list(range(len(price_history))),
+            y=[i[1] for i in price_history],
+            mode='lines', name='test',
+            opacity=0.8, marker_color='black')],
+            output_type='div')
+        print(context['price_plot'])
         return context
 
 def websocket_test(request):
