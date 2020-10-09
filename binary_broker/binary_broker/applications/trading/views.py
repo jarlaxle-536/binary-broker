@@ -58,7 +58,7 @@ def render_navbar_item(request, data):
             'commodity_detail', kwargs={'pk': commodity.pk}),
         '[commodity_title]': commodity.name,
         '[commodity_price]': str(commodity.price),
-        '[commodity_direction]': directions[commodity.get_current_direction()]
+#        '[commodity_direction]': directions[commodity.get_current_direction()]
     }
     for k, v in context.items():
         html = html.replace(k, v)

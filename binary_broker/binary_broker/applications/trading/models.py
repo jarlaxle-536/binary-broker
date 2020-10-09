@@ -58,7 +58,7 @@ class Commodity(models.Model):
         return 1 if pr1 < pr2 else 0 if pr1 == pr2 else -1
 
     def __str__(self):
-        return f'{self.name}: {self.price} $'
+        return f'{self.name}: {self.price}'
 
 class Bet(models.Model):
 

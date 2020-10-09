@@ -3,14 +3,14 @@
 <ul class="navbar-nav justify-content-center not-impl">
   <li class="nav-item">
     <button class="btn btn-dark btn-lg">
-      <a class="nav-link text-white" href="{% url 'commodity_list' %}">
-        {% trans 'Trading' %}
+      <a class="nav-link text-white" href="{% url 'main_page' %}">
+        {% trans 'MainPage' %}
       </a>
     </button>
   </li>
   <li class="nav-item">
     <button class="btn btn-dark btn-lg">
-      <a class="nav-link text-white" href="{% url 'best_traders' %}">
+      <a class="nav-link text-white" href="{% url 'statistics' %}">
         {% trans 'BestTraders' %}
       </a>
     </button>
@@ -19,6 +19,13 @@
     <button class="btn btn-dark btn-lg">
       <a class="nav-link text-white" href="#">
         {% trans 'OtherStuff' %}
+      </a>
+    </button>
+  </li>
+  <li class="nav-item">
+    <button class="btn btn-warning btn-lg">
+      <a class="nav-link text-dark" href="{% url 'commodity_list' %}">
+        {% trans 'Trading' %}
       </a>
     </button>
   </li>

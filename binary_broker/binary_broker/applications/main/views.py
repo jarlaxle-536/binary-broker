@@ -24,8 +24,9 @@ def set_language(request, lang_code):
     response.set_cookie(settings.LANGUAGE_COOKIE_NAME, language)
     return response
 
-def best_traders(request):
-    template = loader.get_template('best_traders.html')
+def statistics(request):
+    template = loader.get_template('statistics.html')
     context = dict()
-    context['traders'] = CustomUser.objects.all()
+    context['top_winners'] = CustomUser.objects.all()
+    context['top_losers'] = CustomUser.objects.all()
     return HttpResponse(template.render(context, request))
