@@ -141,6 +141,9 @@ TIME_ZONE = 'UTC'
 LANGUAGE_CODE = 'en-us'
 LANGUAGES = (
     ('en-us', 'English'),
+    ('fr', 'French'),
+    ('de', 'German'),
+    ('es', 'Spanish'),
     ('ru', 'Russian'),
 )
 LOCALE_PATHS = (

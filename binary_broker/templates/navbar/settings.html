@@ -13,7 +13,7 @@
     <div class="dropdown-menu" style="width: 100%;" aria-labelledby="language_menu_btn">
       {% for language in languages %}
         <a class="dropdown-item" href="{% url 'set_language' forloop.counter0 %}">
-          {{language.name}}
+          {{language.name_local.capitalize}}
         </a>
       {% endfor %}
     </div>

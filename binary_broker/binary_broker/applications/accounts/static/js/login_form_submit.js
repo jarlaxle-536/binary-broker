@@ -18,6 +18,12 @@ login_form.on('submit', function(event) {
         $('#auth_window').modal('toggle');
         location.reload();
         console.log('login form submitted successfully');
+      },
+      error: function(event) {
+        console.log('error occured while submitting login form');
+        console.log('sanity check');
+        login_form = document.getElementById('login_form');
+        login_form.innerHTML += 'some fail';
       }
     });
 });

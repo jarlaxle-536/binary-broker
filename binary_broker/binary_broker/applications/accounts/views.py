@@ -18,15 +18,18 @@ def login_view(request):
         if form.is_valid():
             print(form.cleaned_data)
             user = auth_backend.authenticate(request, **form.cleaned_data)
-            print(user)
+            print('user auth:', user)
             if user:
                 login(request, user)
                 print(user)
                 return redirect(reverse('main_page'))
             else:
+                print(form)
+                raise Exception('No such user or wrong password')
                 "Make additional error messages [password] pop up"
         else:
             print(form.errors)
+            raise Exception('Form invalid')
             "Return data as JsonResponse"
     template = loader.get_template('main_page.html')
     return HttpResponse(template.render(dict(), request))
@@ -49,6 +52,8 @@ def signup_view(request):
             return redirect(reverse('main_page'))
         else:
             print(form.errors)
+            raise Exception('Form invalid')
+            "Return data as JsonResponse"
     template = loader.get_template('main_page.html')
     return HttpResponse(template.render(dict(), request))
 
