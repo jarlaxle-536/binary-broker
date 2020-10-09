@@ -7,9 +7,9 @@ def create_bots():
     bots_to_create = max(0, BOTS_NUMBER - bots_present)
     print(f'will create {bots_to_create} bots.')
     for i in range(bots_to_create):
-        create_bot()
+        create_bot_with_profile()
 
-def create_bot():
+def create_bot_with_profile():
     custom_user_info = {
         'email': FAKER.email(),
         'password': FAKER.password(),
@@ -20,6 +20,7 @@ def create_bot():
     profile.first_name = FAKER.first_name()
     profile.last_name = FAKER.last_name()
     profile.country = FAKER.country_code()
+    profile.save()
 
 def run():
     create_bots()

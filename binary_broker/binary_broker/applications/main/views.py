@@ -5,6 +5,7 @@ from django.template import loader
 from django.conf import settings
 
 from binary_broker.applications.accounts.forms import *
+from binary_broker.applications.accounts.models import *
 
 def main(request):
     template = loader.get_template('main_page.html')
@@ -22,3 +23,9 @@ def set_language(request, lang_code):
     response = redirect(request.META['HTTP_REFERER'])
     response.set_cookie(settings.LANGUAGE_COOKIE_NAME, language)
     return response
+
+def best_traders(request):
+    template = loader.get_template('best_traders.html')
+    context = dict()
+    context['traders'] = CustomUser.objects.all()
+    return HttpResponse(template.render(context, request))

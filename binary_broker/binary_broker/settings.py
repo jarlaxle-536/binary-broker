@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'channels',
     'channels_redis',
+    'django_countries',
     'bootstrap4',
     'crispy_forms',
     'simple_history',
