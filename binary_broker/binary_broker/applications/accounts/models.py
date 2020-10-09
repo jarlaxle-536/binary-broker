@@ -54,7 +54,7 @@ class DemoCashAccount(CashAccount):
     )
 
     def __str__(self):
-        return f'Demo account: {self.havings} $'
+        return f'Demo: {self.havings} $'
 
 class RealCashAccount(CashAccount):
 
@@ -69,4 +69,4 @@ class RealCashAccount(CashAccount):
     )
 
     def __str__(self):
-        return f'Real account: {self.havings} $'
+        return f'Real: {self.havings} $'

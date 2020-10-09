@@ -1,0 +1,16 @@
+{% load i18n %}
+
+<ul class="navbar-nav justify-content-center not-impl">
+  <div class="dropdown">
+  <li class="nav-item">
+    <button class="btn btn-dark btn-lg dropdown-toggle nav-link text-white" type="button" id="language_menu_btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      {% trans 'LanguageDropdownBtn' %}
+    </button>
+    <div class="dropdown-menu" style="width: 100%;" aria-labelledby="language_menu_btn">
+      <a class="dropdown-item" href="#">Action</a>
+      <a class="dropdown-item" href="#">Another action</a>
+      <a class="dropdown-item" href="#">Something else here</a>
+    </div>
+  </li>
+  </div>
+</ul>

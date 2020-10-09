@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<ul class="navbar-nav mr-auto">
+<ul class="navbar-nav mr-auto pull-right">
 {% if user.is_authenticated %}
 <li class="nav-item">
 <div class="btn-group">
@@ -32,7 +32,7 @@
 </li>
 {% else %}
 <li class="nav-item" id="enter_button">
-  <button class="btn btn-primary" data-toggle="modal" data-target="#auth_window">
+  <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#auth_window">
     {% trans 'EnterString' %}
   </button>
 </li>
