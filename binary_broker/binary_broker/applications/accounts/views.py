@@ -27,25 +27,12 @@ def login_view(request):
 def signup_view(request):
     print(f'Signup:{request.method}, ajax: {request.is_ajax()}')
     if request.method == 'POST':
-        print(request.POST)
         form = SignUpForm(request.POST)
+        errors_dict = json.loads(form.errors.as_json())
         if form.is_valid():
-            """
-                Assuming form detects all signup attempts for existing
-                CustomUser with CSRF, so no CustomUser entry in DB for this
-                data exists.
-            """
             user = CustomUser.objects.create_user(**form.cleaned_data)
-            auth_backend.authenticate(request, **form.cleaned_data)
             login(request, user)
-            print(user)
-            return redirect(reverse('main_page'))
-        else:
-            print(form.errors)
-            raise Exception('Form invalid')
-            "Return data as JsonResponse"
-    template = loader.get_template('main_page.html')
-    return HttpResponse(template.render(dict(), request))
+        return HttpResponse(json.dumps(errors_dict, ensure_ascii=False))
 
 def logout_view(request):
     print(f'Logout:{request.method}, ajax: {request.is_ajax()}')

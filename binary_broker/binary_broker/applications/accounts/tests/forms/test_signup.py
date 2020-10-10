@@ -77,7 +77,7 @@ class SignupFormTest(TestCase):
             'email': 'no_match',
             'password': pw,
             'password_confirmation': pwc
-        } for pw in fixtures['password'] for pwc in fixtures['password']
+        } for pw in ['no_match', 'match'] for pwc in ['no_match', 'match']
             if pw != pwc]
         for chosen in all_chosen:
             data = self.build_data(chosen)
