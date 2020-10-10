@@ -30,9 +30,6 @@
           <div class="tab-pane active container" id="login_form">
             <form name="login_form" action="{% url 'login' %}" method="post">
               {% csrf_token %}
-              {% comment %}
-              {{ login_form|crispy }}
-              {% endcomment %}
               {% for field in login_form.visible_fields %}
               <div id="div_id_{{field.name}}" class="form-group">
                 <label for="id_{{field.name}}" class=" requiredField">
@@ -54,7 +51,18 @@
           <div class="tab-pane container" id="signup_form">
             <form name="signup_form" action="{% url 'signup' %}" method="post">
               {% csrf_token %}
-              {{ signup_form|crispy }}
+              {% for field in signup_form.visible_fields %}
+              <div id="div_id_{{field.name}}" class="form-group">
+                <label for="id_{{field.name}}" class=" requiredField">
+                  {{ field.label_tag }}
+                </label>
+                <div class="">
+                  <input type="text" name="{{field.name}}" class="textinput textInput form-control" required="" id="id_{{field.name}}">
+                </div>
+                <div id="id_{{field.name}}_errors">
+                </div>
+              </div>
+              {% endfor %}
               <input type="hidden" name="next" value="{{ next }}">
               <div class="d-flex justify-content-center btn-block">
                 <input class="btn btn-primary btn-lg btn-block bg-dark align-self-end" type="submit" value="{% trans 'SignUpString' %}">

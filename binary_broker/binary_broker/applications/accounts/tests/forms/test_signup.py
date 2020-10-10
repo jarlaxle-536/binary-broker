@@ -12,8 +12,8 @@ class SignupFormTest(TestCase):
 
     def setUp(self):
         self.user_data = {
-            'email': emails['match'],
-            'password': passwords['match']
+            'email': fixtures['email']['match'],
+            'password': fixtures['password']['match']
         }
         self.user = CustomUser.objects.create_user(**self.user_data)
         response = self.client.get(reverse('main_page'))
@@ -21,48 +21,109 @@ class SignupFormTest(TestCase):
         self.signup_form = bs_object.find(
             'div', {'id': SIGNUP_FORM_DIV_ID}).find('form')
 
+    def build_data(self, chosen):
+        data = dict()
+        for k, v in chosen.items():
+            key = 'password' if k.startswith('password') else 'email'
+            data[k] = fixtures[key][v]
+        return data
+
+    def general_test(self, chosen):
+        data = self.build_data(chosen)
+        bound_form = SignUpForm(data=data)
+        error_codes = {k: [dct['code'] for dct in v]
+            for k, v in json.loads(bound_form.errors.as_json()).items()}
+        for k, v in chosen.items():
+            for error_code in ERROR_CODES[k][v]:
+                self.assertIn(error_code, error_codes.get(k, list()))
+
     def test_target(self):
         "Signup form => signup:POST, for old non-AJAX submit"
         self.assertEquals(self.signup_form.get('action'), reverse('signup'))
         self.assertEquals(self.signup_form.get('method'), 'post')
 
-    def test_emails(self):
-        "Provided password causes no errors, verify EMAIL"
-        data = USER_DATA.copy()
-        for email_k, email_v in emails.items():
-            data['email'], errors = email_v, EMAIL_ERRORS[email_k]
-            signup_data = {f'signup_{k}': v for k, v in data.items()}
-            bound_form = SignUpForm(data=data)
-            self.assertEquals(bound_form.is_valid(), not errors)
-            for error in errors:
-                self.assertIn(error, str(bound_form))
+    def test_invalid_email(self):
+        self.general_test({
+            'email': 'invalid',
+            'password': 'no_match'
+        })
 
-    def test_passwords(self):
-        "Provided email causes no errors, verify PASSWORD"
-        data = USER_DATA.copy()
-        for pw_k, pw_v in passwords.items():
-            data['password'], errors = pw_v, PASSWORD_ERRORS[pw_k]
+    def test_no_match_email(self):
+        self.general_test({
+            'email': 'no_match',
+            'password': 'no_match'
+        })
+
+    def test_match_email(self):
+        self.general_test({
+            'email': 'match',
+            'password': 'no_match'
+        })
+
+    def test_empty_password(self):
+        self.general_test({
+            'email': 'no_match',
+            'password': 'empty'
+        })
+
+    def test_too_short_password(self):
+        self.general_test({
+            'email': 'no_match',
+            'password': 'too_short'
+        })
+
+    def test_passwords_not_same(self):
+        all_chosen = [{
+            'email': 'no_match',
+            'password': pw,
+            'password_confirmation': pwc
+        } for pw in fixtures['password'] for pwc in fixtures['password']
+            if pw != pwc]
+        for chosen in all_chosen:
+            data = self.build_data(chosen)
             bound_form = SignUpForm(data=data)
-            self.assertEquals(bound_form.is_valid(), not errors)
-            if data['password'] != data['password_confirmation']:
-                self.assertIn('Passwords do not match', str(bound_form))
-            for error in errors:
-                self.assertIn(error, str(bound_form))
+            error_codes = {k: [dct['code'] for dct in v]
+                for k, v in json.loads(bound_form.errors.as_json()).items()}
+            self.assertIn('passwords_do_not_match',
+                error_codes.get('password_confirmation', []))
+
+    def test_all_correct(self):
+        all_chosen = [{
+            'email': 'no_match',
+            'password': pw,
+            'password_confirmation': pw
+        } for pw in ['no_match', 'match']]
+        for chosen in all_chosen:
+            data = self.build_data(chosen)
+            bound_form = SignUpForm(data=data)
+            error_codes = {k: [dct['code'] for dct in v]
+                for k, v in json.loads(bound_form.errors.as_json()).items()}
+            self.assertEquals(error_codes, dict())
 
 SIGNUP_FORM_DIV_ID = 'signup_form'
-EMAIL_ERRORS = {
-    'invalid': ['Enter a valid email address.'],
-    'no_match': [],
-    'match': ['Custom user with this Email already exists.']
-}
-PASSWORD_ERRORS = {
-    'empty': ['This field is required.'],
-    'too_short': ['This password is too short.'],
-    'no_match': [],
-    'match': ['']
-}
 USER_DATA = {
-    'email': emails['no_match'],
-    'password': passwords['no_match'],
-    'password_confirmation': passwords['no_match']
+    'email': fixtures['email']['no_match'],
+    'password': fixtures['password']['no_match'],
+    'password_confirmation': fixtures['password']['no_match']
 }
+ERROR_CODES = {
+    'email': {
+        'invalid':
+            ['invalid'],
+        'no_match':
+            [],
+        'match':
+            ['unique']
+    },
+    'password': {
+        'empty':
+            ['required'],
+        'too_short':
+            ['password_too_short', 'password_too_common', 'password_entirely_numeric'],
+        'no_match':
+            [],
+        'match':
+            []
+    }
+}
+ERROR_CODES['password_confirmation'] = ERROR_CODES['password']
