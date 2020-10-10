@@ -1,5 +1,6 @@
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
@@ -9,6 +10,7 @@ from bs4 import BeautifulSoup
 import json
 
 from .auth_backends import AuthBackend
+from .exceptions import *
 from .models import *
 from .forms import *
 
@@ -17,17 +19,9 @@ def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         errors_dict = json.loads(form.errors.as_json())
-        print(form)
         user = auth_backend.authenticate(request, **form.cleaned_data)
-        print(errors_dict)
         if user:
             login(request, user)
-        elif not 'no_such_user' in [e['code']
-            for e in errors_dict.get('email', list())]:
-            errors_dict['password'] = [{
-                "message": "PasswordIsIncorrect",
-                "code": "incorrect_password"
-            }]
         return HttpResponse(json.dumps(errors_dict, ensure_ascii=False))
 
 def signup_view(request):

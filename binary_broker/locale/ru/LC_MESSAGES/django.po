@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-09 12:32+0000\n"
+"POT-Creation-Date: 2020-10-10 10:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,32 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: binary_broker/applications/accounts/exceptions.py:15
+msgid "NoSuchUser"
+msgstr "Нет такого пользователя"
+
+#: binary_broker/applications/accounts/exceptions.py:19
+msgid "PasswordIncorrect"
+msgstr "Пароль неверен"
+
+#: binary_broker/applications/accounts/forms.py:16
+msgid "EnterValidEmail"
+msgstr "Введите правильный адрес электронной почты"
+
+#: binary_broker/applications/accounts/forms.py:28
+#: binary_broker/applications/accounts/forms.py:57
+msgid "Email"
+msgstr ""
+
+#: binary_broker/applications/accounts/forms.py:29
+#: binary_broker/applications/accounts/forms.py:60
+msgid "Password"
+msgstr ""
+
+#: binary_broker/applications/accounts/forms.py:63
+msgid "Password confirmation"
+msgstr ""
 
 #: binary_broker/applications/accounts/templates/auth_dialog.html:10
 msgid "SignInToContinueString"
@@ -39,8 +65,8 @@ msgid "SocialLoginString"
 msgstr "Вход через социальные сети"
 
 #: templates/navbar/navigation.html:7
-msgid "Trading"
-msgstr "Начать торговлю"
+msgid "MainPage"
+msgstr ""
 
 #: templates/navbar/navigation.html:14
 msgid "BestTraders"
@@ -49,6 +75,10 @@ msgstr "Лучшие трейдеры"
 #: templates/navbar/navigation.html:21
 msgid "OtherStuff"
 msgstr "Другое"
+
+#: templates/navbar/navigation.html:28
+msgid "Trading"
+msgstr "Начать торговлю"
 
 #: templates/navbar/settings.html:11
 msgid "LanguageString"

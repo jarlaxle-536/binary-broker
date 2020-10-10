@@ -7,7 +7,7 @@ from django.core import validators
 from django import forms
 
 from .models import CustomUser, Profile
-from .auth_backends import AuthBackend
+from .exceptions import *
 
 class CustomEmailField(forms.Field):
 
@@ -30,14 +30,13 @@ class LoginForm(forms.Form):
 
     def clean(self):
         super().clean()
-        if any(map(lambda f: not f in self.cleaned_data, self.fields)):
-            return self.cleaned_data
-        email = self.cleaned_data['email']
-        try:
-            CustomUser.objects.get(email=email)
-        except ObjectDoesNotExist as exc:
-            self.add_error('email',
-                ValidationError('No such user', code='no_such_user') )
+        if all(map(lambda f: f in self.cleaned_data, self.fields)):
+            try:
+                user = CustomUser.objects.get(email=self.cleaned_data['email'])
+                if not user.check_password(self.cleaned_data['password']):
+                    self.add_error('password', IncorrectPasswordError())
+            except ObjectDoesNotExist as exc:
+                self.add_error('email', NoSuchUserError())
         return self.cleaned_data
 
 class SignUpPasswordField(forms.CharField):

@@ -22,13 +22,34 @@ function login_submit (event) {
                     '&email=' + email + '&password=' + password;
 
   event.preventDefault();
+
   $.ajax({
     url: '/accounts/login/',
     type: 'post',
     data: data_string,
-    success: function(event) {
-      console.log('login form ajax post done');
-      console.log(event);
+    success: function(errors_string) {
+      var errors_dict = JSON.parse(errors_string);
+      if ($.isEmptyObject(errors_dict)) {
+        console.log('No form errors, should redirect to main page or next.');
+      }
+      else {
+        login_add_errors(errors_dict);
+      }
     }
   });
+}
+
+function login_add_errors (errors) {
+  console.log('Some form errors occured, should show them in form.');
+  var fields = ['email', 'password']
+  fields.forEach(field => {
+    var text = '<ul>';
+    errors[field].forEach( dct => {
+      text += '<li class="error code-' + dct['code'] + '">' + dct['message'] + '</li>'
+    });
+    text += '</ul>';
+    var errors_div = document.getElementById('id_' + field + '_errors');
+    errors_div.innerHTML = text;
+  });
+
 }
