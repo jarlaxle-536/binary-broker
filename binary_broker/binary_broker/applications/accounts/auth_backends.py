@@ -6,10 +6,8 @@ from .models import CustomUser
 class AuthBackend(BaseBackend):
     def authenticate(self, request, email=None, password=None):
         print('authenticating user with AuthBackend.authenticate')
-#        if not (email and password): return None
-        user = CustomUser.objects.filter(email=email).first()
-        print(email, password)
-
+        if not (email and password): return None
+        user = CustomUser.objects.get(email=email)
         if user and user.check_password(password):
             print('AUTHENTIFIED')
             return user

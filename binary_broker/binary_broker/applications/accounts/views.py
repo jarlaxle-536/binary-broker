@@ -5,6 +5,8 @@ from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.urls import reverse
+from bs4 import BeautifulSoup
+import json
 
 from .auth_backends import AuthBackend
 from .models import *
@@ -13,26 +15,20 @@ from .forms import *
 def login_view(request):
     print(f'Login:{request.method}, ajax: {request.is_ajax()}')
     if request.method == 'POST':
-        print(request.POST)
         form = LoginForm(request.POST)
-        if form.is_valid():
-            print(form.cleaned_data)
-            user = auth_backend.authenticate(request, **form.cleaned_data)
-            print('user auth:', user)
-            if user:
-                login(request, user)
-                print(user)
-                return redirect(reverse('main_page'))
-            else:
-                print(form)
-                raise Exception('No such user or wrong password')
-                "Make additional error messages [password] pop up"
-        else:
-            print(form.errors)
-            raise Exception('Form invalid')
-            "Return data as JsonResponse"
-    template = loader.get_template('main_page.html')
-    return HttpResponse(template.render(dict(), request))
+        errors_dict = json.loads(form.errors.as_json())
+        print(form)
+        user = auth_backend.authenticate(request, **form.cleaned_data)
+        print(errors_dict)
+        if user:
+            login(request, user)
+        elif not 'no_such_user' in [e['code']
+            for e in errors_dict.get('email', list())]:
+            errors_dict['password'] = [{
+                "message": "PasswordIsIncorrect",
+                "code": "incorrect_password"
+            }]
+        return HttpResponse(json.dumps(errors_dict, ensure_ascii=False))
 
 def signup_view(request):
     print(f'Signup:{request.method}, ajax: {request.is_ajax()}')

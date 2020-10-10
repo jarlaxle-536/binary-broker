@@ -1,41 +1,68 @@
 from django.contrib.auth.password_validation import validate_password
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import ValidationError
 from django.forms.utils import ErrorList
+from django.core import validators
 from django import forms
 
 from .models import CustomUser, Profile
+from .auth_backends import AuthBackend
+
+class CustomEmailField(forms.Field):
+
+    default_validators = [
+        validators.EmailValidator(
+            message=_('EnterValidEmail')
+        ),
+    ]
+
+class LoginPasswordField(forms.Field):
+
+    default_validators = [
+        validate_password
+    ]
 
 class LoginForm(forms.Form):
 
-    email = forms.EmailField(localize=True)
-    password = forms.CharField(widget=forms.PasswordInput(), localize=True)
+    email = CustomEmailField(label=_('Email'))
+    password = LoginPasswordField(label=_('Password'))
 
-    localized_fields = ('email', 'password')
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        for field in self.fields.values():
-#            field.localize = field.widget.is_localized = True
-            print(field.__dict__)
-
-    def clean_password(self):
-        password = self.cleaned_data['password']
+    def clean(self):
+        super().clean()
+        if any(map(lambda f: not f in self.cleaned_data, self.fields)):
+            return self.cleaned_data
+        email = self.cleaned_data['email']
         try:
-            validate_password(password)
-        except ValidationError as exc:
-            self.add_error('password', exc)
-        return password
+            CustomUser.objects.get(email=email)
+        except ObjectDoesNotExist as exc:
+            self.add_error('email',
+                ValidationError('No such user', code='no_such_user') )
+        return self.cleaned_data
+
+class SignUpPasswordField(forms.CharField):
+
+    default_validators = tuple()
+
+class PasswordConfirmationField(forms.CharField):
+
+    default_validators = tuple()
 
 class SignUpForm(forms.ModelForm):
-
-    email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput())
-    password_confirmation = forms.CharField(widget=forms.PasswordInput())
 
     class Meta:
         model = CustomUser
         fields = ('email', 'password')
+
+    email = CustomEmailField(
+        label=_('Email')
+    )
+    password = SignUpPasswordField(
+        label=_('Password')
+    )
+    password_confirmation = PasswordConfirmationField(
+        label=_('Password confirmation')
+    )
 
     def clean(self):
         cleaned_data = super(SignUpForm, self).clean()
