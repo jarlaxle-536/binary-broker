@@ -31,14 +31,14 @@
             <form name="login_form" action="{% url 'login' %}" method="post">
               {% csrf_token %}
               {% for field in login_form.visible_fields %}
-              <div id="div_id_{{field.name}}" class="form-group">
-                <label for="id_{{field.name}}" class=" requiredField">
+              <div id="login_div_id_{{field.name}}" class="form-group">
+                <label for="login_id_{{field.name}}" class=" requiredField">
                   {{ field.label_tag }}
                 </label>
                 <div class="">
-                  <input type="text" name="{{field.name}}" class="textinput textInput form-control" required="" id="id_{{field.name}}">
+                  <input type="text" name="{{field.name}}" class="textinput textInput form-control" required="" id="login_id_{{field.name}}">
                 </div>
-                <div id="id_{{field.name}}_errors">
+                <div id="login_id_{{field.name}}_errors">
                 </div>
               </div>
               {% endfor %}
@@ -52,14 +52,14 @@
             <form name="signup_form" action="{% url 'signup' %}" method="post">
               {% csrf_token %}
               {% for field in signup_form.visible_fields %}
-              <div id="div_id_{{field.name}}" class="form-group">
-                <label for="id_{{field.name}}" class=" requiredField">
+              <div id="signup_div_id_{{field.name}}" class="form-group">
+                <label for="signup_id_{{field.name}}" class=" requiredField">
                   {{ field.label_tag }}
                 </label>
                 <div class="">
-                  <input type="text" name="{{field.name}}" class="textinput textInput form-control" required="" id="id_{{field.name}}">
+                  <input type="text" name="{{field.name}}" class="textinput textInput form-control" required="" id="signup_id_{{field.name}}">
                 </div>
-                <div id="id_{{field.name}}_errors">
+                <div id="signup_id_{{field.name}}_errors">
                 </div>
               </div>
               {% endfor %}

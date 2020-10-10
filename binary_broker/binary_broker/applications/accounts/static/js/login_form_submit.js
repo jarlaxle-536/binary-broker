@@ -1,5 +1,5 @@
 var login_form = $('#login_form');
-var inputs = ['#id_email', '#id_password'];
+var inputs = ['#login_id_email', '#login_id_password'];
 
 for (var input in inputs) {
   $(input).on('keypress', function (event) {
@@ -48,8 +48,7 @@ function login_add_errors (errors) {
       text += '<li class="error code-' + dct['code'] + '">' + dct['message'] + '</li>'
     });
     text += '</ul>';
-    var errors_div = document.getElementById('id_' + field + '_errors');
+    var errors_div = document.getElementById('login_id_' + field + '_errors');
     errors_div.innerHTML = text;
   });
-
 }

@@ -77,8 +77,7 @@ class SignupFormTest(TestCase):
             'email': 'no_match',
             'password': pw,
             'password_confirmation': pwc
-        } for pw in ['no_match', 'match'] for pwc in ['no_match', 'match']
-            if pw != pwc]
+        } for pw in VALID_PASSWORDS for pwc in VALID_PASSWORDS if pw != pwc]
         for chosen in all_chosen:
             data = self.build_data(chosen)
             bound_form = SignUpForm(data=data)
@@ -92,7 +91,7 @@ class SignupFormTest(TestCase):
             'email': 'no_match',
             'password': pw,
             'password_confirmation': pw
-        } for pw in ['no_match', 'match']]
+        } for pw in VALID_PASSWORDS]
         for chosen in all_chosen:
             data = self.build_data(chosen)
             bound_form = SignUpForm(data=data)
@@ -127,3 +126,4 @@ ERROR_CODES = {
     }
 }
 ERROR_CODES['password_confirmation'] = ERROR_CODES['password']
+VALID_PASSWORDS = ['no_match', 'match']

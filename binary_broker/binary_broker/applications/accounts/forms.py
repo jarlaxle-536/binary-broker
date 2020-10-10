@@ -26,7 +26,7 @@ class SignUpForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('email', 'password')
+        fields = ('email', 'password', 'password_confirmation')
 
     email = SignupEmailField(
         label=_('Email')
@@ -40,10 +40,9 @@ class SignUpForm(forms.ModelForm):
 
     def clean(self):
         super().clean()
-        if all(map(lambda f: f in self.cleaned_data, self.fields)):
-            if len(set([v for k, v in self.cleaned_data.items()
-                if k.startswith('password')])) != 1:
-                self.add_error('password_confirmation',
+        if self.cleaned_data.get('password', None) != \
+            self.cleaned_data.get('password_confirmation', None):
+            self.add_error('password_confirmation',
                     PasswordsDoNotMatch())
         return self.cleaned_data
 
