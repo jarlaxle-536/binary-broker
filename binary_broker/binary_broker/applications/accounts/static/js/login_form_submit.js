@@ -41,10 +41,9 @@ function login_submit (event) {
 
 function login_add_errors (errors) {
   console.log('Some form errors occured, should show them in form.');
-  var fields = ['email', 'password']
-  fields.forEach(field => {
+  Object.keys(errors).forEach(field => {
     var text = '<ul>';
-    errors[field].forEach( dct => {
+    errors[field].forEach(dct => {
       text += '<li class="error code-' + dct['code'] + '">' + dct['message'] + '</li>'
     });
     text += '</ul>';

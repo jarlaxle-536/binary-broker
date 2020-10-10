@@ -19,8 +19,6 @@ def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         errors_dict = json.loads(form.errors.as_json())
-        for k in ['email', 'password']:
-            errors_dict.setdefault(k, list())
         user = auth_backend.authenticate(request, **form.cleaned_data)
         if user:
             login(request, user)
@@ -31,12 +29,9 @@ def signup_view(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         errors_dict = json.loads(form.errors.as_json())
-        for k in ['email', 'password', 'password_confirmation']:
-            errors_dict.setdefault(k, list())
         if form.is_valid():
             refined_data = {k: v for k, v in form.cleaned_data.items()
                 if k in [k.name for k in CustomUser._meta.fields]}
-            print(refined_data)
             user = CustomUser.objects.create_user(**refined_data)
             login(request, user)
         return HttpResponse(json.dumps(errors_dict, ensure_ascii=False))

@@ -44,13 +44,9 @@ function signup_submit (event) {
 
 function signup_add_errors (errors) {
   console.log('Some form errors occured, should show them in form.');
-  var fields = ['email', 'password', 'password_confirmation']
-  fields.forEach(field => {
+  Object.keys(errors).forEach( field => {
     var text = '<ul>';
-    console.log(errors[field])
-    console.log(field);
     errors[field].forEach( dct => {
-      console.log(dct)
       text += '<li class="error code-' + dct['code'] + '">' + dct['message'] + '</li>';
     });
     text += '</ul>';

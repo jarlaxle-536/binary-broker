@@ -3,9 +3,9 @@ from django.urls import reverse
 from bs4 import BeautifulSoup
 import json
 
-from binary_broker.applications.accounts.models import *
+from binary_broker.applications.accounts.tests.fixtures.fixture_loader import *
 from binary_broker.applications.accounts.forms import LoginForm
-from .fixture_loader import *
+from binary_broker.applications.accounts.models import *
 
 class LoginFormTest(TestCase):
 

@@ -4,9 +4,9 @@ from django.test import TestCase
 from django.urls import reverse
 from bs4 import BeautifulSoup
 
+from binary_broker.applications.accounts.tests.fixtures.fixture_loader import *
 from binary_broker.applications.accounts.forms import SignUpForm
 from binary_broker.applications.accounts.models import *
-from .fixture_loader import *
 
 class SignupFormTest(TestCase):
 
