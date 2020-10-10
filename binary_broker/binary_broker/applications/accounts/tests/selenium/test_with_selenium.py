@@ -26,13 +26,13 @@ class AccountTestCase(LiveServerTestCase):
         for wanted in wanted_links:
             self.assertIn(get_url(HOST, reverse(wanted)), links)
 
-    def test_main_page(self):
+    def bltest_main_page(self):
         self.present_links_test('main_page', [
             'main_page',
             'commodity_list'
         ])
 
-    def test_login(self):
+    def tfdgest_login(self):
         page_url = get_url(HOST, reverse('main_page'))
         driver.get(page_url)
         enter_button = driver.find_element_by_id('enter_button')
@@ -80,4 +80,4 @@ def get_elements(
 def get_element(*args, **kwargs):
     return get_elements(*args, **kwargs)[0]
 
-initialize_webdriver(headless=False)
+#initialize_webdriver(headless=False)
