@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from .views import *
 
@@ -12,4 +12,5 @@ urlpatterns = [
     path('profile/<int:pk>', user_profile_detail, name='user_profile_detail'),
     path('profile/<int:pk>/demo_account', user_profile_demo_account_detail, name='user_profile_demo_account_detail'),
     path('profile/<int:pk>/real_account', user_profile_real_account_detail, name='user_profile_real_account_detail'),
+    path('', include('social_django.urls', namespace='social'), name='social'),
 ]

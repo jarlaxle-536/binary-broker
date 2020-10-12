@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'channels',
     'channels_redis',
     'django_countries',
+    'social_django',
     'bootstrap4',
     'crispy_forms',
     'simple_history',
@@ -111,6 +112,18 @@ LOGIN_URL = reverse_lazy('login')
 AUTH_USER_MODEL = 'accounts.CustomUser'
 with open(os.path.join(BASE_DIR, 'secrets', 'api_secrets.json')) as file:
     API_SECRETS = json.load(file)
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+with open('secrets/api_secrets.json') as file:
+    api_secrets = json.load(file)
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = api_secrets['google']['key']
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = api_secrets['google']['secret']
+SOCIAL_AUTH_FACEBOOK_KEY = api_secrets['facebook']['key']
+SOCIAL_AUTH_FACEBOOK_SECRET = api_secrets['facebook']['secret']
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

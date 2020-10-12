@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load static %}
 {% load crispy_forms_tags %}
+{% load custom %}
 
 <div id="auth_window" class="modal fade" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered justify-content-center " role="document">
@@ -77,9 +78,13 @@
               <div class="col-sm">
                 <button type="button" class="btn btn-icon btn-block">
                   <span>
-                    {% with '/images/'|add:provider|add:'_logo.png' as img_src %}
-                      <img src="{% static img_src %}" width="40">
-                    {% endwith %}
+                    {% if provider in 'google facebook' %}
+                    <a href="{% url 'social:begin' oauth_backends|get_from_dict:provider %}">
+                      <img src="{% static oauth_logo_paths|get_from_dict:provider %}" width="40">
+                    </a>
+                    {% else %}
+                      <img src="{% static oauth_logo_paths|get_from_dict:provider %}" width="40">
+                    {% endif %}
                   </span>
                 </button>
               </div>

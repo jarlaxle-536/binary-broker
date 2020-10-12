@@ -45,6 +45,8 @@ class LoginTestCase(LiveServerTestCase):
             list_items = errors_div.find_elements_by_tag_name('li') or []
             error_codes = [li.get_attribute('class').split('code-')[1].split()[0]
                 for li in list_items]
+            print('current error codes:', error_codes)
+            print('true error codes:', ERROR_CODES[k][v])
             for error_code in ERROR_CODES[k][v]:
                 self.assertIn(error_code, error_codes)
 

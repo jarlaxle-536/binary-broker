@@ -11,7 +11,6 @@ class LoginViewTest(TestCase):
     def setUp(self):
         self.user_data = get_user_data()
         self.user = CustomUser.objects.create_user(**self.user_data)
-        print('IN DB:', self.user)
 
     def test_login_view_post_match(self):
         "Login:post with user match"
