@@ -12,8 +12,7 @@ def auth_context_processor(request):
     context['oauth_backends'] = {
         'google': 'google-oauth2',
         'facebook': 'facebook',
-        'github': '',
-        'vk': ''
+        'github': 'github',
     }
     context['oauth_logo_paths'] = {p: f'images/{p}_logo.png'
         for p in context['oauth_providers']}

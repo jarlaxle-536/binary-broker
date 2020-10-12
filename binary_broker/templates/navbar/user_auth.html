@@ -4,7 +4,7 @@
 {% if user.is_authenticated %}
 <li class="nav-item">
 <div class="btn-group">
-  <button type="button" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     {{ user }}
   </button>
   <div class="dropdown-menu w-100">
@@ -20,7 +20,7 @@
 </li>
 <li class="nav-item">
   <div class="form-group">
- <select class="form-control btn-lg" id="select_account">
+ <select class="form-control" id="select_account">
    <option class="dropdown-item" value="Demo">
      {{user.profile.demo_account}}
    </option>
@@ -32,7 +32,7 @@
 </li>
 {% else %}
 <li class="nav-item" id="enter_button">
-  <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#auth_window">
+  <button class="btn btn-primary nav-btn" data-toggle="modal" data-target="#auth_window">
     {% trans 'EnterString' %}
   </button>
 </li>

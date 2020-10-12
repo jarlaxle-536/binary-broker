@@ -2,30 +2,23 @@
 
 <ul class="navbar-nav justify-content-center not-impl">
   <li class="nav-item">
-    <button class="btn btn-dark btn-lg">
-      <a class="nav-link text-white" href="{% url 'main_page' %}">
-        {% trans 'MainPage' %}
+    <button class="btn btn-warning nav-btn">
+      <a class="nav-link text-dark" href="{% url 'commodity_list' %}">
+        {% trans 'Trading' %}
       </a>
     </button>
   </li>
   <li class="nav-item">
-    <button class="btn btn-dark btn-lg">
+    <button class="btn btn-dark">
       <a class="nav-link text-white" href="{% url 'statistics' %}">
         {% trans 'BestTraders' %}
       </a>
     </button>
   </li>
   <li class="nav-item">
-    <button class="btn btn-dark btn-lg">
+    <button class="btn btn-dark">
       <a class="nav-link text-white" href="#">
         {% trans 'OtherStuff' %}
-      </a>
-    </button>
-  </li>
-  <li class="nav-item">
-    <button class="btn btn-warning btn-lg">
-      <a class="nav-link text-dark" href="{% url 'commodity_list' %}">
-        {% trans 'Trading' %}
       </a>
     </button>
   </li>

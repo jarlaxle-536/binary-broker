@@ -15,7 +15,6 @@ from .models import *
 from .forms import *
 
 def login_view(request):
-#    print(f'Login:{request.method}, ajax: {request.is_ajax()}')
     if request.method == 'POST':
         form = LoginForm(request.POST)
         errors_dict = json.loads(form.errors.as_json())
@@ -23,9 +22,11 @@ def login_view(request):
         if user:
             login(request, user)
         return HttpResponse(json.dumps(errors_dict, ensure_ascii=False))
+    else:
+        template = loader.get_template('main_page.html')
+        return HttpResponse(template.render(dict(), request))
 
 def signup_view(request):
-#    print(f'Signup:{request.method}, ajax: {request.is_ajax()}')
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         errors_dict = json.loads(form.errors.as_json())
@@ -37,11 +38,13 @@ def signup_view(request):
         return HttpResponse(json.dumps(errors_dict, ensure_ascii=False))
 
 def logout_view(request):
-#    print(f'Logout:{request.method}, ajax: {request.is_ajax()}')
     if request.user.is_authenticated:
         logout(request)
     template = loader.get_template('main_page.html')
     return HttpResponse(template.render(dict(), request))
+
+def social_login(request):
+    pass
 
 @login_required
 def set_account_type(request):

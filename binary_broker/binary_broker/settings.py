@@ -115,15 +115,36 @@ with open(os.path.join(BASE_DIR, 'secrets', 'api_secrets.json')) as file:
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.github.GithubOAuth2',
     'django.contrib.auth.backends.ModelBackend',
+)
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    'social.pipeline.social_auth.associate_by_email',
+    'social.pipeline.user.create_user',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details'
 )
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 with open('secrets/api_secrets.json') as file:
     api_secrets = json.load(file)
+
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = api_secrets['google']['key']
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = api_secrets['google']['secret']
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email']
+
 SOCIAL_AUTH_FACEBOOK_KEY = api_secrets['facebook']['key']
 SOCIAL_AUTH_FACEBOOK_SECRET = api_secrets['facebook']['secret']
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+
+SOCIAL_AUTH_GITHUB_KEY = api_secrets['github']['key']
+SOCIAL_AUTH_GITHUB_SECRET = api_secrets['github']['secret']
+SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
