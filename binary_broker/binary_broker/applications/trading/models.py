@@ -79,10 +79,18 @@ class Bet(models.Model):
     )
     duration = models.IntegerField(choices=DURATIONS, null=False)
     time_start = models.DateTimeField(auto_now_add=True)
+    success = models.BooleanField(
+        null=True,
+        blank=True,
+    )
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         self.price_when_created = self.commodity.price
+
+    @property
+    def finalized(self):
+        return getattr(self, '_finalized', False)
 
     @property
     def time_finish(self):
@@ -94,15 +102,21 @@ class Bet(models.Model):
         return getattr(profile, 'real_account' if self.is_real_account
             else 'demo_account')
 
-    def finalize(self):
-        utc = pytz.UTC
-        current_time = utc.localize(datetime.datetime.utcnow())
-        if self.time_finish > current_time: return
+    def finalize_by_time(self, time):
+        print(f'Finalizing {self}.')
+        print(f'Time: {time}')
+        print(f'Finish time: {self.time_finish}')
+        if self.time_finish > time or self.finalized: return
         print(f'{self} done')
         success = self.direction == (self.commodity.price -
             self.price_when_created > 0)
         if success:
             print(f'{self} WON!')
             self.account.havings += 2 * self.venture
+            self.account.save()
         else:
             print(f'{self} LOST!')
+        self.success = success
+        self._finalized = True
+        self.save()
+        print(self.__dict__)

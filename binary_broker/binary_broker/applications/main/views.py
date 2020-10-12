@@ -27,6 +27,11 @@ def set_language(request, lang_code):
 def statistics(request):
     template = loader.get_template('statistics.html')
     context = dict()
-    context['top_winners'] = CustomUser.objects.all()
-    context['top_losers'] = CustomUser.objects.all()
+    users = CustomUser.objects.all()
+    users_with_earnings = [(u, sum([
+        (lambda s, v: (1 if s else -1) * v)(b.success, b.venture)
+        for b in u.profile.bet_set.all() if not b is None])) for u in users]
+    users_with_earnings.sort(key=lambda l: l[1], reverse=True)
+    context['top_winners'] = users_with_earnings[:10]
+    context['top_losers'] = users_with_earnings[-10:]
     return HttpResponse(template.render(context, request))

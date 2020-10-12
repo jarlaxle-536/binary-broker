@@ -1,6 +1,6 @@
 """
-    1. Create some bot users, with creation date ~ one week ago.
-    2. Make them trade till current moment.
+    For the sake of speed, save all bets in local memory (dict, list, ...),
+    then batch insert them into db.
 """
 
 import datetime
@@ -46,27 +46,27 @@ def create_bot_with_profile():
     profile.real_account.save()
 
 def do_trade():
+    utc = pytz.UTC
     users = [u for u in Bot.objects.all()]
-    actual_time = datetime.datetime.utcnow()
+    actual_time = utc.localize(datetime.datetime.utcnow())
     current_time = actual_time - TIME_TO_PASS
-    print(current_time)
     while current_time < actual_time:
-        check_finished_bets()
+        print('Current time:', current_time)
+        for bet in bot_bets:
+            bet.finalize_by_time(current_time)
         print(current_time)
         for cmd in commodities:
             cmd.price = cmd.get_new_price()
         for user in users:
-            bot_trade(user)
+            bot_trade(user, current_time)
         current_time += datetime.timedelta(seconds=300 * random.random())
 
-def bot_trade(user):
+def bot_trade(user, current_time):
     if not user.is_bot: return
     global bot_bets
     chance = 0.1
     will_trade = random.random() < chance
     if will_trade:
-        print(f'{user} will choose commodity, account type, bet venture and make a bet')
-        dct = dict()
         available_ventures = [v for v in Bet.VENTURES
             if v[0] <= user.profile.real_account.havings]
         if available_ventures:
@@ -76,19 +76,17 @@ def bot_trade(user):
                 'is_real_account': True,
                 'direction': random.choice(Bet.DIRECTIONS)[0],
                 'venture': random.choice(available_ventures)[0],
-                'duration': random.choice(Bet.DURATIONS)[0]
+                'duration': random.choice(Bet.DURATIONS)[0],
             }
             print('user had BEFORE:', user.profile.real_account.havings)
             bet = Bet.objects.create(**bet_dict)
+            bet.time_start = current_time
+            bet.save()
             print('user has AFTER:', user.profile.real_account.havings)
             bot_bets += [bet]
             print(bet_dict)
             print(bet)
             print(bet.price_when_created)
-
-def check_finished_bets():
-    for bet in bot_bets:
-        bet.finalize()
 
 def run():
     create_commodities()
@@ -100,5 +98,5 @@ def run():
 
 FAKER = faker.Faker()
 
-BOTS_NUMBER = 10
+BOTS_NUMBER = 20
 TIME_TO_PASS = datetime.timedelta(hours=1)
