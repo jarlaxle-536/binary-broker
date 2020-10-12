@@ -27,7 +27,6 @@ class Commodity(models.Model):
         max_dev = 0.01 * float(self.price)
         change = decimal.Decimal(2 * (random.random() - 0.5) * max_dev)
         self._diff = change
-        print(self._diff, self.diff)
         return self.price + change
 
     @property
@@ -79,13 +78,31 @@ class Bet(models.Model):
         **DEFAULT_NUMERIC_SETTINGS
     )
     duration = models.IntegerField(choices=DURATIONS, null=False)
-    time_start = models.TimeField(auto_now_add=True)
+    time_start = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.price_when_created = self.commodity.price
+
+    @property
     def time_finish(self):
-        return self.time_start + self.duration
+        return self.time_start + datetime.timedelta(seconds=self.duration)
 
     @property
     def account(self):
         profile = self.owner
         return getattr(profile, 'real_account' if self.is_real_account
             else 'demo_account')
+
+    def finalize(self):
+        utc = pytz.UTC
+        current_time = utc.localize(datetime.datetime.utcnow())
+        if self.time_finish > current_time: return
+        print(f'{self} done')
+        success = self.direction == (self.commodity.price -
+            self.price_when_created > 0)
+        if success:
+            print(f'{self} WON!')
+            self.account.havings += 2 * self.venture
+        else:
+            print(f'{self} LOST!')

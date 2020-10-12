@@ -2,6 +2,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django_countries.fields import CountryField
 from django.db import models
+import random
 
 from .managers import UserManager
 
@@ -20,9 +21,6 @@ class Bot(CustomUser):
 
     class Meta:
         proxy = True
-
-    def trade(self):
-        'will choose commodity, account type, bet venture and make a bet'
 
 class Profile(models.Model):
 

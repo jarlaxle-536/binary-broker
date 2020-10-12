@@ -6,6 +6,7 @@
 import datetime
 import random
 import faker
+import pytz
 
 from binary_broker.applications.accounts.models import *
 from binary_broker.applications.trading.models import *
@@ -40,22 +41,64 @@ def create_bot_with_profile():
     profile.first_name = FAKER.first_name()
     profile.last_name = FAKER.last_name()
     profile.country = FAKER.country_code()
+    profile.real_account.havings = 1000 * random.random()
     profile.save()
+    profile.real_account.save()
 
 def do_trade():
+    users = [u for u in Bot.objects.all()]
     actual_time = datetime.datetime.utcnow()
     current_time = actual_time - TIME_TO_PASS
     print(current_time)
     while current_time < actual_time:
+        check_finished_bets()
         print(current_time)
-        current_time += datetime.timedelta(seconds=300*random.random())
+        for cmd in commodities:
+            cmd.price = cmd.get_new_price()
+        for user in users:
+            bot_trade(user)
+        current_time += datetime.timedelta(seconds=300 * random.random())
+
+def bot_trade(user):
+    if not user.is_bot: return
+    global bot_bets
+    chance = 0.1
+    will_trade = random.random() < chance
+    if will_trade:
+        print(f'{user} will choose commodity, account type, bet venture and make a bet')
+        dct = dict()
+        available_ventures = [v for v in Bet.VENTURES
+            if v[0] <= user.profile.real_account.havings]
+        if available_ventures:
+            bet_dict = {
+                'commodity': random.choice(commodities),
+                'owner': user.profile,
+                'is_real_account': True,
+                'direction': random.choice(Bet.DIRECTIONS)[0],
+                'venture': random.choice(available_ventures)[0],
+                'duration': random.choice(Bet.DURATIONS)[0]
+            }
+            print('user had BEFORE:', user.profile.real_account.havings)
+            bet = Bet.objects.create(**bet_dict)
+            print('user has AFTER:', user.profile.real_account.havings)
+            bot_bets += [bet]
+            print(bet_dict)
+            print(bet)
+            print(bet.price_when_created)
+
+def check_finished_bets():
+    for bet in bot_bets:
+        bet.finalize()
 
 def run():
     create_commodities()
+    global commodities, bot_bets
+    commodities = Commodity.objects.all()
+    bot_bets = list()
     create_bots()
     do_trade()
 
 FAKER = faker.Faker()
 
-BOTS_NUMBER = 5
-TIME_TO_PASS = datetime.timedelta(hours=24 * 7)
+BOTS_NUMBER = 10
+TIME_TO_PASS = datetime.timedelta(hours=1)
