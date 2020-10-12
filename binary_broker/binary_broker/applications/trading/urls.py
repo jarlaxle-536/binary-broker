@@ -19,5 +19,9 @@ urlpatterns = [
         CommodityPartialUpdateView.as_view(),
         name='commodity_update'
     ),
-#    path('ajax/websocket_test', websocket_test, name='ws_test'),
+    path(
+        'commodity/<int:pk>/get_price_plot/',
+        get_prices_plot_and_script,
+        name='get_price_plot'
+    ),
 ]

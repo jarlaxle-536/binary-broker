@@ -4,8 +4,12 @@
 
 {% block app_content %}
 
-{{ price_plot_div|safe }}
-
+<script id="price_plot_script">
 {{ price_plot_script|safe }}
+</script>
+
+<div id="price_plot_outer_div">
+{{ price_plot_div|safe }}
+</div>
 
 {% endblock app_content %}
