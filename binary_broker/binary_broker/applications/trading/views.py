@@ -6,6 +6,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import loader
 from django.urls import reverse
+from bokeh.plotting import figure, output_file, show
+from bokeh.embed import components
 
 from plotly.graph_objs import Scatter
 from plotly.offline import plot
@@ -73,13 +75,16 @@ class CommodityDetailView(DetailView):
         context = super().get_context_data(*args, **kwargs)
         price_history = kwargs['object'].get_last_records(
             datetime.timedelta(seconds=60))
-        context['price_plot'] = plot([Scatter(
-            x=list(range(len(price_history))),
-            y=[i[1] for i in price_history],
-            mode='lines', name='test',
-            opacity=0.8, marker_color='black')],
-            output_type='div')
-        print(context['price_plot'])
+        plot = figure(
+            title='lorem ipsum',
+            x_axis_label='x',
+            y_axis_label='y',
+            plot_width=400,
+            plot_height=400
+        )
+        plot.line(*([[1, 2, 3]] * 2))
+        context['price_plot_script'], context['price_plot_div'] = \
+        components(plot)
         return context
 
 def websocket_test(request):

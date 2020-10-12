@@ -1,4 +1,5 @@
 from django.conf import settings
+from bokeh.resources import CDN
 
 def global_settings_processor(request):
     keys = ['LANGUAGES', 'LANGUAGE_CODE']

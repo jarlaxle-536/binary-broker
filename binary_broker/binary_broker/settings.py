@@ -87,7 +87,7 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
                 'binary_broker.applications.accounts.context_processors.auth_context_processor',
                 'binary_broker.applications.trading.context_processors.trading_context_processor',
-                'binary_broker.applications.main.context_processors.global_settings_processor'
+                'binary_broker.applications.main.context_processors.global_settings_processor',
             ],
         },
     },

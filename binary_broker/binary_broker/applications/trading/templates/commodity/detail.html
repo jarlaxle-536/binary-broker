@@ -4,14 +4,9 @@
 
 {% block app_content %}
 
-<div id="price_plot">
-{% autoescape off %}
-{{ price_plot }}
-{% endautoescape %}
-</div>
+{{ price_plot_div|safe }}
 
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
+{{ price_plot_script|safe }}
 <script src="{% static 'js/websocket_test.js' %}">  </script>
 
 {% endblock app_content %}

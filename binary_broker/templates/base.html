@@ -3,20 +3,26 @@
 
 <html>
 <head>
-{% bootstrap_css %}
-<link rel='stylesheet' href='{% static "css/styles.css" %}'>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-{% bootstrap_javascript jquery='full' %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-<title>
- Binary Broker
-</title>
+  {% bootstrap_css %}
+  <link rel='stylesheet' href='{% static "css/styles.css" %}'>
+  <script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.2.1.min.js"
+          crossorigin="anonymous"></script>
+  <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.2.1.min.js"
+          crossorigin="anonymous"></script>
+  <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.2.1.min.js"
+          crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  {% bootstrap_javascript jquery='full' %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+  <title>
+    Binary Broker
+  </title>
 </head>
 <body>
-{% include 'navbar/navbar.html' %}
-{% block content %}
-{% endblock content %}
-{% block javascript %}
-{% endblock javascript %}
-</body>
+  {% include 'navbar/navbar.html' %}
+  {% block content %}
+  {% endblock content %}
+  {% block javascript %}
+  {% endblock javascript %}
+  </body>
 </html>
