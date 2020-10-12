@@ -3,8 +3,15 @@
 <ul class="navbar-nav justify-content-center not-impl">
   <li class="nav-item pull-left">
     <button class="btn btn-warning nav-btn">
-      <a class="nav-link text-dark" href="{% url 'commodity_list' %}">
+      <a class="nav-link text-dark" href="{% url 'commodity_detail' id_of_commodity_to_trade %}">
         {% trans 'Trading' %}
+      </a>
+    </button>
+  </li>
+  <li class="nav-item pull-left">
+    <button class="btn btn-dark">
+      <a class="nav-link  text-white" href="{% url 'main_page' %}">
+        {% trans 'MainPage' %}
       </a>
     </button>
   </li>

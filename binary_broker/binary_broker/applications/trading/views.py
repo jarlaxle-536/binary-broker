@@ -6,11 +6,10 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import loader
 from django.urls import reverse
-from bokeh.plotting import figure, output_file, show
-from bokeh.embed import components
 
-from plotly.graph_objs import Scatter
-from plotly.offline import plot
+from bokeh.plotting import figure, output_file, show
+from bokeh.models import DatetimeTickFormatter
+from bokeh.embed import components
 
 from rest_framework.response import Response
 
@@ -73,18 +72,24 @@ class CommodityDetailView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        price_history = kwargs['object'].get_last_records(
+        prices_history = kwargs['object'].get_last_records(
             datetime.timedelta(seconds=60))
-        plot = figure(
-            title='lorem ipsum',
-            x_axis_label='x',
-            y_axis_label='y',
-            plot_width=400,
-            plot_height=400
+        prices_history.sort(key=lambda t: t[0])
+        prices_plot = figure(
+            x_axis_type='datetime',
+            plot_width=600,
+            plot_height=350
         )
-        plot.line(*([[1, 2, 3]] * 2))
+        prices_plot.line(*list(zip(*prices_history)))
+        prices_plot.xaxis.formatter = DatetimeTickFormatter(
+            hours=["%d %B %Y"],
+            days=["%d %B %Y"],
+            months=["%d %B %Y"],
+            years=["%d %B %Y"],
+        )
+        print(*[i[0] for i in prices_history], sep='\n')
         context['price_plot_script'], context['price_plot_div'] = \
-        components(plot)
+        components(prices_plot)
         return context
 
 def websocket_test(request):

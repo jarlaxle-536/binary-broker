@@ -24,7 +24,9 @@ class Commodity(models.Model):
     history = HistoricalRecords()
 
     def get_new_price(self):
-        return self.price + decimal.Decimal(0.05 * random.choice([-1, 1]))
+        max_dev = 0.01 * float(self.price)
+        change = decimal.Decimal(2 * (random.random() - 0.5) * max_dev)
+        return self.price + change
 
     def get_price_history(self):
         history_entries = self.history.all().order_by('history_date')
@@ -36,11 +38,6 @@ class Commodity(models.Model):
         all_historical_entries = self.get_price_history()
         current_time = utc.localize(datetime.datetime.utcnow())
         min_time = current_time - timedelta
-        """
-            do binary search for latest i'th element with invalid time,
-            create queue of all records from i (incl.) to the last one,
-            update this queue every time
-        """
         for ind in range(len(all_historical_entries)):
             if all_historical_entries[ind][0] >= min_time: break
         last_entries = list(map(list, all_historical_entries[ind:]))

@@ -69,6 +69,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'binary_broker.applications.main.middlewares.settings_middleware',
+    'binary_broker.applications.trading.middlewares.trading_middleware',    
 ]
 
 ROOT_URLCONF = 'binary_broker.urls'
