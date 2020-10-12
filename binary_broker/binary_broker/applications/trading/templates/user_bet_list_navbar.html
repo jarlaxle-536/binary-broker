@@ -1,3 +1,39 @@
-<h4 class="not-impl">
-  User bets
-</h4>
+{% load i18n %}
+
+<nav class="navbar navbar-expand navbar-dark bg-secondary flex-md-column flex-row justify-content-center">
+
+  <h5 class="display-6 text-white" style="text-align: center;">
+    {% trans 'UserBetsListNavbar' %}
+  </h5>
+
+  <table class="table text-white">
+    <thead>
+      <tr>
+        <th scope="col">
+          {% trans 'Venture' %}
+        </th>
+        <th scope="col">
+          {% trans 'Time' %}
+        </th>
+        <th scope="col">
+          {% trans 'Income' %}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for bet in bets %}
+      <tr>
+        <td>
+          0
+        </td>
+        <td>
+          0
+        </td>
+        <td>
+          0
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</nav>

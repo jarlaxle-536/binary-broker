@@ -1,10 +1,10 @@
 {% load i18n %}
 
-<ul class="navbar-nav mr-auto pull-right">
+<ul class="navbar-nav mr-auto pull-right justify-content-center not-impl">
 {% if user.is_authenticated %}
-<li class="nav-item">
+<li class="nav-item nav-btn">
 <div class="btn-group">
-  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  <button type="button" class="btn btn-primary nav-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     {{ user }}
   </button>
   <div class="dropdown-menu w-100">
@@ -18,7 +18,7 @@
   </div>
 </div>
 </li>
-<li class="nav-item">
+<li class="nav-item nav-btn">
   <div class="form-group">
  <select class="form-control" id="select_account">
    <option class="dropdown-item" value="Demo">

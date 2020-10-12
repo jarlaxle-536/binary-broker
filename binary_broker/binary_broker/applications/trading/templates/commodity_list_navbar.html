@@ -1,13 +1,43 @@
 {% load i18n %}
 
-<nav class="navbar navbar-expand navbar-dark bg-dark flex-md-column flex-row align-items-start">
-<h4 class="display-6">
-  Commodities
-</h4>
+<nav class="navbar navbar-expand navbar-dark bg-secondary flex-md-column flex-row justify-content-center">
 
-<ul class="flex-md-column flex-row navbar-nav w-100" id="commodity_list_ul">
-  loading...
-</ul>
+  <h5 class="display-6 text-white" style="text-align: center;">
+    {% trans 'CommoditiesListCaption' %}
+  </h5>
+
+  <table class="table text-white">
+    <thead>
+      <tr>
+        <th scope="col">
+          {% trans 'Commodity' %}
+        </th>
+        <th scope="col">
+          {% trans 'Price' %}
+        </th>
+        <th scope="col">
+          {% trans 'Direction' %}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for commodity in commodity_list %}
+      <tr>
+        <td id="cmd_{{commodity.pk}}_name">
+          <a href="{% url 'commodity_detail' commodity.pk %}" class="nounderline text-white">
+            {{commodity.name}}
+          </a>
+        </td>
+        <td id="cmd_{{commodity.pk}}_price">
+          {{commodity.price}}
+        </td>
+        <td id="cmd_{{commodity.pk}}_direction">
+          0
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </nav>
 
 <script>

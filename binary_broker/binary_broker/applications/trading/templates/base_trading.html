@@ -3,24 +3,24 @@
 {% load static %}
 
 {% block content %}
-<div class="container-fluid h-100 overflow-auto" style="height: 100px;"">
+<div class="container-fluid overflow-auto" style="height: 400px;"">
   <div class="row h-75">
-    <div class="col-12 col-md-3 p-0 bg-dark">
+    <div class="col-12 col-md-3 p-0 bg-secondary">
       {% include 'commodity_list_navbar.html' %}
     </div>
     <div class="col-sm">
       {% block app_content %}
       {% endblock app_content %}
     </div>
-    <div class="col-12 col-md-2 p-0 bg-dark">
-        <nav class="navbar navbar-expand navbar-dark bg-dark flex-md-column flex-row align-items-start">
-          {% include 'user_bet_list_navbar.html' %}
-        </nav>
+    <div class="col-12 col-md-3 p-0 bg-secondary">
+        {% include 'user_bet_list_navbar.html' %}
     </div>
   </div>
 </div>
 
+{% comment %}
 <script src="{% static 'js/commodity_list_navbar_update.js' %}">
 </script>
+{% endcomment %}
 
 {% endblock content %}
