@@ -5,22 +5,36 @@
 {% block content %}
 <div class="container-fluid overflow-auto" style="height: 400px;"">
   <div class="row h-75">
-    <div class="col-12 col-md-3 p-0 bg-secondary">
+    <div class="col-12 col-md-3 p-0 bg-info">
       {% include 'commodity_list_navbar.html' %}
     </div>
     <div class="col-sm">
       {% block app_content %}
       {% endblock app_content %}
     </div>
-    <div class="col-12 col-md-3 p-0 bg-secondary">
+    <div class="col-12 col-md-3 p-0 bg-info">
         {% include 'user_bet_list_navbar.html' %}
     </div>
   </div>
 </div>
 
-{% comment %}
-<script src="{% static 'js/commodity_list_navbar_update.js' %}">
+<script src="{% static 'js/commodity_list_navbar_update.js' %}"></script>
+
+<script>
+  console.log(window.location.host);
+  var socket = new WebSocket('ws://' + window.location.host + '/trading/');
+
+  socket.onopen = function open() {
+    console.log('WebSockets connection created.');
+  };
+
+  socket.onmessage = function(e) {
+    update_trading();
+  };
+
+  if (socket.readyState == WebSocket.OPEN) {
+    socket.onopen();
+  };
 </script>
-{% endcomment %}
 
 {% endblock content %}

@@ -33,37 +33,15 @@ class CommodityPartialUpdateView(GenericAPIView, UpdateModelMixin):
 
     def patch(self, request, *args, **kwargs):
         print('calling commodity partial update w/patch')
-        print(self.__dict__)
         instances = Commodity.objects.all()
         serializer = CommoditySerializer(instances, many=True)
-        rendered = ''
-        for data in serializer.data:
-            rendered += render_navbar_item(request, data)
-        return Response(rendered)
+        print(serializer.data)
+        return Response(serializer.data)
 
     def put(self, request, *args, **kwargs):
         instances = []
         serializer = DemoSerializer(instances, many=True)
         return Response(serializer.data)
-
-def render_navbar_item(request, data):
-    html = loader.get_template('commodity/navbar_item.html').template.source
-    commodity = Commodity.objects.get(pk=data['id'])
-    directions = {
-        1: 'up',
-        0: 'eq',
-        -1: 'down'
-    }
-    context = {
-        '[commodity_detail_url]': reverse(
-            'commodity_detail', kwargs={'pk': commodity.pk}),
-        '[commodity_title]': commodity.name,
-        '[commodity_price]': str(commodity.price),
-#        '[commodity_direction]': directions[commodity.get_current_direction()]
-    }
-    for k, v in context.items():
-        html = html.replace(k, v)
-    return html
 
 class CommodityDetailView(DetailView):
 

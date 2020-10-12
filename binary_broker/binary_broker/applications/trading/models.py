@@ -26,7 +26,13 @@ class Commodity(models.Model):
     def get_new_price(self):
         max_dev = 0.01 * float(self.price)
         change = decimal.Decimal(2 * (random.random() - 0.5) * max_dev)
+        self._diff = change
+        print(self._diff, self.diff)
         return self.price + change
+
+    @property
+    def diff(self):
+        return getattr(self, '_diff', 0)
 
     def get_price_history(self):
         history_entries = self.history.all().order_by('history_date')
@@ -48,11 +54,6 @@ class Commodity(models.Model):
             if last[0] >= current_time: break
             last_entries += [last[:]]
         return last_entries
-
-    def get_current_direction(self):
-        price_history = self.get_price_history()
-        pr1, pr2 = [i[1] for i in price_history[-2:]]
-        return 1 if pr1 < pr2 else 0 if pr1 == pr2 else -1
 
     def __str__(self):
         return f'{self.name}: {self.price}'

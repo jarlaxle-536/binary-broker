@@ -6,6 +6,10 @@ from rest_framework import serializers
 from .models import *
 
 class CommoditySerializer(serializers.ModelSerializer):
+
+    diff = serializers.ReadOnlyField()
+    _diff = serializers.ReadOnlyField()
+
     class Meta:
         model = Commodity
-        fields = '__all__'
+        fields = ('id', 'name', 'price', 'mean_price', 'diff', '_diff')

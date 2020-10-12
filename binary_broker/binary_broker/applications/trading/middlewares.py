@@ -11,9 +11,8 @@ def set_commodity_to_trade(request):
     cmd_key = 'id_of_commodity_to_trade'
     path = request.path
     to_split_by = '/trading/commodity/'
-    print(request.session.get(cmd_key, None))
     if path.startswith(to_split_by):
-        commodity_id = int(path.split(to_split_by)[-1])
-        request.session[cmd_key] = commodity_id
+        value = path.split(to_split_by)[-1]
+        if value.isdigit():
+            request.session[cmd_key] = int(value)
     request.session.setdefault(cmd_key, 1)
-    print('cmd to trade:', request.session[cmd_key])

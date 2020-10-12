@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from celery.schedules import crontab
 from django.conf import settings
 from celery import Celery
 import datetime

@@ -10,10 +10,6 @@ from binary_broker.celery import *
 from .consumers import *
 from .models import *
 
-@shared_task
-def do_smth():
-    print('hello')
-
 @app.task
 def alter_prices():
     commodities = Commodity.objects.all()

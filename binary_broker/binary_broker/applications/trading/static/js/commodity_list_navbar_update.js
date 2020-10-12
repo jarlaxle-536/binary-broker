@@ -1,23 +1,24 @@
-function update_commodities_list() {
-  console.log('cmd navbar update start');
+function update_trading() {
+  console.log('update trading start');
   var csrf_token = $('[name="csrfmiddlewaretoken"]').attr('value');
-  console.log('csrf: ' + csrf_token);
   $.ajax({
     url: '/trading/commodity/update',
     headers: {
       "X-CSRFToken": csrf_token
     },
     type: 'patch',
-    success: function(e) {
-      console.log('connection successful');
-//      get_commodity_navbar_li(e);
-      cmd_list_ul = document.getElementById('commodity_list_ul');
-      cmd_list_ul.innerHTML = e;
-      console.log('updated cmd list navbar');
+    success: function(data) {
+      update_commodity_list_navbar(data);
     }
   });
 }
 
-function get_commodity_navbar_li (data) {
-  console.log('building li element for data: ' + data);
+function update_commodity_list_navbar (data) {
+  console.log('will update cmd list navbar');
+  data.forEach(cmd_info => {
+    price_td = document.getElementById('cmd_' + cmd_info['id'] + '_price');
+    price_td.innerHTML = cmd_info['price'];
+    diff_td = document.getElementById('cmd_' + cmd_info['id'] + '_diff');
+    diff_td.innerHTML = cmd_info['diff'];
+  });
 }

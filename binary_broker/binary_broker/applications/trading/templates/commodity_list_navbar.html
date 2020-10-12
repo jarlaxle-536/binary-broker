@@ -1,10 +1,11 @@
 {% load i18n %}
 
-<nav class="navbar navbar-expand navbar-dark bg-secondary flex-md-column flex-row justify-content-center">
+<nav class="navbar navbar-expand navbar-dark bg-info flex-md-column flex-row justify-content-center">
 
   <h5 class="display-6 text-white" style="text-align: center;">
     {% trans 'CommoditiesListCaption' %}
   </h5>
+
 
   <table class="table text-white">
     <thead>
@@ -22,7 +23,7 @@
     </thead>
     <tbody>
     {% for commodity in commodity_list %}
-      <tr>
+      <tr id="cmd_{{commodity.pk}}_tr">
         <td id="cmd_{{commodity.pk}}_name">
           <a href="{% url 'commodity_detail' commodity.pk %}" class="nounderline text-white">
             {{commodity.name}}
@@ -31,7 +32,7 @@
         <td id="cmd_{{commodity.pk}}_price">
           {{commodity.price}}
         </td>
-        <td id="cmd_{{commodity.pk}}_direction">
+        <td id="cmd_{{commodity.pk}}_diff">
           0
         </td>
       </tr>
@@ -39,20 +40,3 @@
     </tbody>
   </table>
 </nav>
-
-<script>
-  console.log(window.location.host);
-  var socket = new WebSocket('ws://' + window.location.host + '/trading/');
-
-  socket.onopen = function open() {
-    console.log('WebSockets connection created.');
-  };
-
-  socket.onmessage = function(e) {
-    update_commodities_list();
-  };
-
-  if (socket.readyState == WebSocket.OPEN) {
-    socket.onopen();
-  };
-</script>

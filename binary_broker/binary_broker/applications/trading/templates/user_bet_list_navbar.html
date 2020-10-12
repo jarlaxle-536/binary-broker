@@ -1,19 +1,20 @@
 {% load i18n %}
 
-<nav class="navbar navbar-expand navbar-dark bg-secondary flex-md-column flex-row justify-content-center">
+<nav class="navbar navbar-expand navbar-dark bg-info flex-md-column flex-row justify-content-center">
 
   <h5 class="display-6 text-white" style="text-align: center;">
-    {% trans 'UserBetsListNavbar' %}
+    {% trans 'UserBetsListCaption' %}
   </h5>
 
+  {% if bets %}
   <table class="table text-white">
     <thead>
       <tr>
         <th scope="col">
-          {% trans 'Venture' %}
+          {% trans 'Time' %}
         </th>
         <th scope="col">
-          {% trans 'Time' %}
+          {% trans 'Venture' %}
         </th>
         <th scope="col">
           {% trans 'Income' %}
@@ -33,7 +34,17 @@
           0
         </td>
       </tr>
+        <tr>
+          <td colspan="5" style="text-align: center;">
+            {% trans 'NoBetsYet' %}
+          </td>
+        </tr>
       {% endfor %}
     </tbody>
   </table>
+  {% else %}
+  <h6 class="display-6 text-white" style="text-align: center;">
+    {% trans 'NoBetsYet' %}
+  </h6>
+  {% endif %}
 </nav>
