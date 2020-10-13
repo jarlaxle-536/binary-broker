@@ -21,7 +21,9 @@
           {% for trader, earnings in top_winners %}
           <tr>
             <td>
+              <a href="{% url 'user_profile_detail' trader.pk %}">
               {{trader}}
+              </a>
             </td>
             <td>
               <img src="{{trader.profile.country.flag}}" width="25px;">
@@ -50,7 +52,9 @@
           {% for trader, earnings in top_losers %}
           <tr>
             <td>
+              <a href="{% url 'user_profile_detail' trader.pk %}">
               {{trader}}
+              </a>
             </td>
             <td>
               <img src="{{trader.profile.country.flag}}" width="25px;">
