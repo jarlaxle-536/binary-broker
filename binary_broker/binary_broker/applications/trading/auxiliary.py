@@ -4,8 +4,8 @@ def create_mp_price_plot_figure(price_history, title=''):
     """
         Returns pyplot figure.
     """
-    print('Price history:')
-    print(*price_history, sep='\n')
+#    print('Price history:')
+#    print(*price_history, sep='\n')
 
     figure = pyplot.Figure()
     price_plot = figure.add_subplot(111)

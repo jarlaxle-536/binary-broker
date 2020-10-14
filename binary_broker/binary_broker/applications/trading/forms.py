@@ -3,8 +3,14 @@ from django import forms
 
 from .models import *
 
-class BetForm(forms.ModelForm):
+class BetFormPartial(forms.ModelForm):
 
     class Meta:
         model = Bet
         fields = ('venture', 'duration')
+
+class BetFormFull(forms.ModelForm):
+
+    class Meta:
+        model = Bet
+        fields = ('venture', 'duration', 'direction', 'owner', 'commodity', 'is_real_account')

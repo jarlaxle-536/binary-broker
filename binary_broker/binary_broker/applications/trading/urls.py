@@ -24,4 +24,9 @@ urlpatterns = [
         create_price_plot_response,
         name='get_price_plot'
     ),
+    path(
+        'commodity/<int:pk>/create_bet/',
+        create_bet,
+        name='create_bet'    
+    )
 ]
