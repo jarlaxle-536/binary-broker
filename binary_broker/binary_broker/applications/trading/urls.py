@@ -21,7 +21,7 @@ urlpatterns = [
     ),
     path(
         'commodity/<int:pk>/get_price_plot/',
-        get_prices_plot_and_script,
+        get_prices_plot,
         name='get_price_plot'
     ),
 ]

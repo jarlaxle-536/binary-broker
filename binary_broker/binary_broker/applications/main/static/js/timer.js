@@ -12,5 +12,5 @@ function get_time () {
 };
 
 $(function(){
-    setInterval(get_time, 1000);
+    setInterval(get_time, 5000);
 });

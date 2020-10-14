@@ -4,12 +4,10 @@
 
 {% block app_content %}
 
-<script id="price_plot_script">
-{{ price_plot_script|safe }}
-</script>
+{{commodity}}
 
 <div id="price_plot_outer_div">
-{{ price_plot_div|safe }}
+<img id="prices_plot" src="{% url 'get_price_plot' commodity.pk %}">
 </div>
 
 {% endblock app_content %}

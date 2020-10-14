@@ -40,16 +40,7 @@ function update_commodity_list_navbar (data) {
 
 function update_price_plot (data) {
   console.log('will update cmd plot');
-  var to_split_by = '<div'
-  var splitted = data.split(to_split_by);
-  var script = splitted[0];
-  var div = to_split_by + splitted[1];
-  var pp_outer_div = document.getElementById('price_plot_outer_div');
-  var script_outer = document.getElementById('price_plot_script');
-  console.log('before');
-  console.log(script_outer.innerHTML);
-  pp_outer_div.innerHTML = div;
-//  script_outer.innerHTML = script;
-  console.log('after');
-  console.log(script_outer.innerHTML);
+  img = document.getElementById('prices_plot');
+  img.src = data;
+  console.log(img);
 }

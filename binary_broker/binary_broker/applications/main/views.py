@@ -14,6 +14,15 @@ def main(request):
     context = dict()
     context['login_form'] = LoginForm()
     context['signup_form'] = SignUpForm()
+    context = dict()
+    users = CustomUser.objects.all()
+    users_with_earnings = [(u, sum([
+        (lambda s, v: (1 if s else -1) * v)(b.success, b.venture)
+        for b in u.profile.bet_set.all() if not b is None])) for u in users]
+    users_to_take = 5
+    users_with_earnings.sort(key=lambda l: l[1], reverse=True)
+    context['top_winners'] = users_with_earnings[:users_to_take]
+    context['top_losers'] = users_with_earnings[-users_to_take:]
     return HttpResponse(template.render(context, request))
 
 def set_language(request, lang_code):
@@ -44,6 +53,6 @@ def get_time(request):
 
 def get_time_dict():
     current_time = datetime.datetime.utcnow()
-    time_string = current_time.strftime('%Y-%m-%D %H:%M:%S')
+    time_string = current_time.strftime("%I:%M%p")
     dct = {'time_string': time_string}
     return dct

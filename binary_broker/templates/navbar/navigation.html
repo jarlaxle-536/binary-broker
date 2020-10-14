@@ -1,32 +1,43 @@
 {% load i18n %}
 
-<ul class="navbar-nav justify-content-center not-impl">
-  <li class="nav-item pull-left">
-    <button class="btn btn-warning nav-btn">
-      <a class="nav-link text-dark" href="{% url 'commodity_detail' id_of_commodity_to_trade %}">
-        {% trans 'Trading' %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+
+<li class="nav-item pull-left">
+  <button class="btn btn-dark">
+    <a class="nav-link  text-white" href="{% url 'main_page' %}">
+      {% trans 'MainPage' %}
+    </a>
+  </button>
+</li>
+<li class="nav-item pull-left">
+  <button class="btn btn-warning">
+    <a class="nav-link text-dark" href="{% url 'commodity_detail' id_of_commodity_to_trade %}">
+      {% trans 'Trading' %}
+    </a>
+  </button>
+</li>
+
+<li class="nav-item pull-right">
+  <div class="dropdown">
+    <button class="btn dropdown-toggle nav-link text-white nav-btn" type="button" id="language_menu_btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <a class="nav-link text-white" href="#">
+        {% trans 'LanguageString' %}: {{LANGUAGE_CODE}}
       </a>
     </button>
-  </li>
-  <li class="nav-item pull-left">
-    <button class="btn btn-dark">
-      <a class="nav-link  text-white" href="{% url 'main_page' %}">
-        {% trans 'MainPage' %}
-      </a>
-    </button>
-  </li>
-  <li class="nav-item pull-left">
-    <button class="btn btn-dark">
-      <a class="nav-link text-white" href="{% url 'statistics' %}">
-        {% trans 'BestTraders' %}
-      </a>
-    </button>
-  </li>
-  <li class="nav-item pull-left">
-    <button class="btn btn-dark">
-      <p class="nav-link text-white" id="current_time_string">
-        {{time_string}}
-      </p>
-    </button>
-  </li>
-</ul>
+    <div class="dropdown-menu bg-primary" style="width: 100%;" aria-labelledby="language_menu_btn">
+      {% for language in languages %}
+        <a class="dropdown-item bg-primary full-width text-white" href="{% url 'set_language' forloop.counter0 %}">
+          {{language.name_local.capitalize}}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</li>
+
+<li class="nav-item pull-right">
+    <p class="lav-link navbar-text navbar-right text-right" id="current_time_string" style="text-overflow: ellipsis; overflow:hidden;">
+      {{time_string}}
+    </p>
+</li>

@@ -2,9 +2,78 @@
 {% load static %}
 
 {% block content %}
-<nav class="navbar navbar-expand-lg navbar-light bg-danger">
-  {% include 'navbar/header.html' %}
-</nav>
+
+<div class="w3-content">
+ <img src="{% static 'images/banner.png' %}" alt="custom_banner" style="width:100%">
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <h4 style="text-align: center;">
+        TOP WINNERS
+      </h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">User</th>
+            <th scope="col">Country</th>
+            <th scope="col">Earnings</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for trader, earnings in top_winners %}
+          <tr>
+            <td>
+              <a href="{% url 'user_profile_detail' trader.pk %}">
+              {{trader}}
+              </a>
+            </td>
+            <td>
+              <img src="{{trader.profile.country.flag}}" width="25px;">
+            </td>
+            <td>
+              {{earnings}}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="col-sm">
+      <h4 style="text-align: center;">
+        TOP LOSERS
+      </h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">User</th>
+            <th scope="col">Country</th>
+            <th scope="col">Earnings</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for trader, earnings in top_losers %}
+          <tr>
+            <td>
+              <a href="{% url 'user_profile_detail' trader.pk %}">
+              {{trader}}
+              </a>
+            </td>
+            <td>
+              <img src="{{trader.profile.country.flag}}" width="25px;">
+            </td>
+            <td>
+              {{earnings}}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <div class="container">
 <div class="section">
 {% include 'user_quotes.html' %}

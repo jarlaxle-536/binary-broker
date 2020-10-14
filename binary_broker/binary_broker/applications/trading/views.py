@@ -4,6 +4,9 @@ from rest_framework.response import Response
 from django.http import HttpResponse
 from django.http import JsonResponse
 
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+
 from bokeh.plotting import figure, output_file, show
 from bokeh.models import DatetimeTickFormatter
 from bokeh.models import AjaxDataSource
@@ -41,24 +44,31 @@ class CommodityDetailView(DetailView):
         prices_history = kwargs['object'].get_last_records(
             datetime.timedelta(seconds=60))
         prices_history.sort(key=lambda t: t[0])
-        context['price_plot_script'], context['price_plot_div'] = \
-            create_prices_plot_components(prices_history)
+
+        context['price_plot'] = create_prices_plot(prices_history)
         return context
 
-def get_prices_plot_and_script(request, pk):
+def get_prices_plot(request, pk):
     print(f'getting prices plot for {pk}')
     commodity = Commodity.objects.get(pk=pk)
     prices_history = commodity.get_last_records(
         datetime.timedelta(seconds=60))
-    plot_components = create_prices_plot_components(prices_history)
-    return HttpResponse(plot_components)
+    return create_prices_plot(prices_history)
 
-def create_prices_plot_components(prices_history):
-    prices_plot = figure(x_axis_type='datetime', plot_width=600, plot_height=350)
-    prices_plot.line(*list(zip(*prices_history)))
-    plot_components = list(components(prices_plot))
-    plot_components[0] = get_rid_of_outer_tags(plot_components[0])
-    return plot_components
+def create_prices_plot(prices_history):
+    fig = Figure()
+    ax = fig.add_subplot(111)
 
-def get_rid_of_outer_tags(text):
-    return '<'.join('>'.join(text.split('>')[1:]).split('<')[:-1])
+    x = []
+    y = []
+
+    x = [k[1] for k in prices_history]
+    y = [k[0] for k in prices_history]
+
+    ax.plot_date(x, y, '-')
+#    ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
+    fig.autofmt_xdate()
+    canvas = FigureCanvas(fig)
+    response = HttpResponse(content_type='image/png')
+    canvas.print_png(response)
+    return response
