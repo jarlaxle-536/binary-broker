@@ -1,0 +1,17 @@
+{% load i18n %}
+
+<li class="nav-item">
+  <button class="btn btn-block">
+    <a class="nav-link text-white"" href="{% url 'main_page' %}">
+      {% trans 'MainPage' %}
+    </a>
+  </button>
+</li>
+
+<li class="nav-item float-left">
+  <button class="btn btn-warning btn-block">
+    <a class="nav-link text-dark" href="{% url 'commodity_detail' id_of_commodity_to_trade %}">
+      {% trans 'Trading' %}
+    </a>
+  </button>
+</li>
