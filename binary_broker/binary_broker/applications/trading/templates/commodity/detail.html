@@ -1,14 +1,38 @@
 {% extends 'base_trading.html' %}
 
 {% load static %}
+{% load i18n %}
 
 {% block app_content %}
 
-<div class="container" id="price_plot_div">
-  <img width='500px;' src="{% url 'get_price_plot' commodity.pk %}" id="price_plot">
-  {% comment %}
+<div class="container p-0" id="price_plot_div">
+  <img  src="{% url 'get_price_plot' commodity.pk %}" id="price_plot">
+</div>
 
-  {% endcomment %}
+<div class="container-fluid">
+  <form name="bet_form" action="#" method="post" id='bet_form'>
+    {% csrf_token %}
+    {% comment %}
+    {% for field in bet_form.visible_fields %}
+    <div id="bet_div_id_{{field.name}}" class="form-group">
+      <label for="bet_id_{{field.name}}" class=" requiredField">
+        {{ field.label_tag }}
+      </label>
+      <div class="">
+        <input type="text" name="{{field.name}}" class="textinput textInput form-control" required="" id="bet_id_{{field.name}}">
+      </div>
+      <div id="bet_id_{{field.name}}_errors">
+      </div>
+    </div>
+    {% endfor %}
+    {% endcomment %}
+    <input type="hidden" name="next" value="{{ next }}">
+    <div class="d-flex justify-content-center btn-group" style="width: 100%;">
+      <input name="up" class="btn btn-success" type="submit" value="{% trans 'MakeBetUp' %}">
+      <input name="down" class="btn btn-danger" type="submit" value="{% trans 'MakeBetDown' %}">
+    </div>
+    {{ bet_form.as_table }}
+  </form>
 </div>
 
 {% endblock app_content %}

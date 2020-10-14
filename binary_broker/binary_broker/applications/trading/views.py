@@ -10,6 +10,7 @@ from matplotlib.figure import Figure
 from .serializers import *
 from .auxiliary import *
 from .models import *
+from .forms import *
 
 class CommodityPartialUpdateView(GenericAPIView, UpdateModelMixin):
 
@@ -38,6 +39,7 @@ class CommodityDetailView(DetailView):
         context = super().get_context_data(*args, **kwargs)
         commodity = kwargs['object']
         context['price_plot'] = create_price_plot(commodity)
+        context['bet_form'] = BetForm()
         return context
 
 def create_price_plot_response(request, pk):

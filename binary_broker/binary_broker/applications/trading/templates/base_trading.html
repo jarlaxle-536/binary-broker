@@ -8,7 +8,7 @@
     <div class="col-12 col-md-3 p-0 bg-dark">
       {% include 'commodity_list_navbar.html' %}
     </div>
-    <div class="col-sm">
+    <div class="col-sm p-0">
       {% block app_content %}
       {% endblock app_content %}
     </div>
@@ -19,8 +19,7 @@
 </div>
 
 <script src="{% static 'js/update_trading.js' %}"></script>
-{% comment %}
-{% endcomment %}
 <script src="{% static 'js/websocket_connector.js' %}"></script>
+<script src="{% static 'js/bet_form_submit.js' %}"></script>
 
 {% endblock content %}
