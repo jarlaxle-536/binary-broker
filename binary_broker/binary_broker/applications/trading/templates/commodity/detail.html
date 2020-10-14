@@ -4,10 +4,8 @@
 
 {% block app_content %}
 
-{{commodity}}
-
 <div id="price_plot_outer_div">
-<img id="prices_plot" src="{% url 'get_price_plot' commodity.pk %}">
+  <img width='600px;' src="{% url 'get_price_plot' commodity.pk %}" id="prices_plot">
 </div>
 
 {% endblock app_content %}

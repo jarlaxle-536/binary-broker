@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse_lazy
 from pathlib import Path
 import datetime
@@ -69,7 +70,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'binary_broker.applications.main.middlewares.settings_middleware',
-    'binary_broker.applications.trading.middlewares.trading_middleware',    
+    'binary_broker.applications.trading.middlewares.trading_middleware',
 ]
 
 ROOT_URLCONF = 'binary_broker.urls'
@@ -176,11 +177,11 @@ TIME_ZONE = 'UTC'
 
 LANGUAGE_CODE = 'en-us'
 LANGUAGES = (
-    ('en-us',   'English'),
-    ('fr',      'French'),
-    ('de',      'German'),
-    ('es',      'Spanish'),
-    ('ru',      'Russian'),
+    ('en-us',   _('English')),
+    ('fr',      _('French')),
+    ('de',      _('German')),
+    ('es',      _('Spanish')),
+    ('ru',      _('Russian')),
 )
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale/'),

@@ -8,6 +8,7 @@ import json
 
 from binary_broker.applications.accounts.forms import *
 from binary_broker.applications.accounts.models import *
+from .auxiliary import *
 
 def main(request):
     template = loader.get_template('main_page.html')
@@ -50,9 +51,3 @@ def statistics(request):
 
 def get_time(request):
     return HttpResponse(json.dumps(get_time_dict(), ensure_ascii=False))
-
-def get_time_dict():
-    current_time = datetime.datetime.utcnow()
-    time_string = current_time.strftime("%I:%M%p")
-    dct = {'time_string': time_string}
-    return dct

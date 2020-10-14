@@ -1,5 +1,7 @@
 {% load i18n %}
 
+{% load custom %}
+
 {% get_current_language as LANGUAGE_CODE %}
 {% get_available_languages as LANGUAGES %}
 {% get_language_info_list for LANGUAGES as languages %}
@@ -57,12 +59,11 @@
 
 {% include 'auth_dialog.html' %}
 
-
 <li class="nav-item">
   <div class="btn-group btn-block">
     <button class="btn dropdown-toggle nav-link text-white type="button" id="language_menu_btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <a class="nav-link text-white" href="#">
-        {% trans 'LanguageString' %}: {{LANGUAGE_CODE}}
+        {% trans 'LanguageString' %}: {{language_names|get_from_dict:LANGUAGE_CODE}}
       </a>
     </button>
     <div class="dropdown-menu" style="width: 100%;" aria-labelledby="language_menu_btn">
