@@ -1,6 +1,6 @@
 from matplotlib import pyplot, dates
 
-def create_price_plot(price_history, title=''):
+def create_mp_price_plot_figure(price_history, title=''):
     """
         Returns pyplot figure.
     """

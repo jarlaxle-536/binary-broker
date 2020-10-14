@@ -4,8 +4,11 @@
 
 {% block app_content %}
 
-<div id="price_plot_outer_div">
-  <img width='600px;' src="{% url 'get_price_plot' commodity.pk %}" id="prices_plot">
+<div class="container" id="price_plot_div">
+  <img width='500px;' src="{% url 'get_price_plot' commodity.pk %}" id="price_plot">
+  {% comment %}
+
+  {% endcomment %}
 </div>
 
 {% endblock app_content %}

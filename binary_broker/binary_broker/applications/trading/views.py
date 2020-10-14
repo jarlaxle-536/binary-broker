@@ -36,18 +36,25 @@ class CommodityDetailView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        prices_history = kwargs['object'].get_last_records(
-            datetime.timedelta(seconds=60))
-        prices_history.sort(key=lambda t: t[0])
-
-        context['price_plot'] = create_price_plot(prices_history)
+        commodity = kwargs['object']
+        context['price_plot'] = create_price_plot(commodity)
         return context
 
 def create_price_plot_response(request, pk):
     commodity = Commodity.objects.get(pk=pk)
+    return create_mp_price_plot_response(commodity)
+
+def create_price_plot(commodity):
+    return create_mp_price_plot(commodity)
+
+def create_mp_price_plot(commodity):
     price_history = commodity.get_last_records(
         datetime.timedelta(seconds=60))
-    plot = create_price_plot(price_history)
+    return create_mp_price_plot_figure(price_history, title=commodity.name)
+
+def create_mp_price_plot_response(commodity):
+    print('create mp price plot response')
+    plot = create_mp_price_plot(commodity)
     canvas = FigureCanvas(plot)
     response = HttpResponse(content_type='image/png')
     canvas.print_png(response)
