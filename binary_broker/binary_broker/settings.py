@@ -17,6 +17,8 @@ import datetime
 import json
 import os
 
+from .custom_settings import *
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -251,7 +253,3 @@ CACHES = {
         }
     }
 }
-
-# Custom
-
-GLOBAL_UPDATE_PERIOD = datetime.timedelta(seconds=5)

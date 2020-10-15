@@ -1,26 +1,22 @@
-from django.db import models
+import datetime, decimal, random, pytz
+
 from simple_history.models import HistoricalRecords
 from django.conf import settings
-import datetime
-import decimal
-import random
-import pytz
+from django.db import models
 
 from binary_broker.applications.accounts.models import *
 
-DEFAULT_NUMERIC_SETTINGS = {
-    'max_digits': 10,
-    'decimal_places': 2
-}
-
-class Commodity(models.Model):
-
-    class Meta:
-        verbose_name_plural = 'commodities'
+class Asset(models.Model):
 
     name = models.CharField(max_length=50)
-    mean_price = models.DecimalField(default=10, **DEFAULT_NUMERIC_SETTINGS)
-    price = models.DecimalField(default=10, **DEFAULT_NUMERIC_SETTINGS)
+    mean_price = models.DecimalField(
+        default=10,
+        **settings.DEFAULT_NUMERIC_SETTINGS
+    )
+    price = models.DecimalField(
+        default=10,
+        **settings.DEFAULT_NUMERIC_SETTINGS
+    )
     history = HistoricalRecords()
 
     def get_new_price(self):
@@ -59,25 +55,26 @@ class Commodity(models.Model):
 
 class Bet(models.Model):
 
-    DIRECTIONS = [(True, 'up'), (False, 'down')]
-    IS_REAL = [(True, 'yes'), (False, 'no')]
-    DURATIONS = [(v, str(v)) for v in [10, 30, 60, 120]]
-    VENTURES = [(v, str(v)) for v in [1, 2, 5, 10, 20, 50, 100]]
-
-    commodity = models.ForeignKey(Commodity, on_delete=models.CASCADE)
+    asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
     is_real_account = models.BooleanField(
-        choices=IS_REAL,
+        choices=settings.BET_IS_REAL,
         null=True,
         default=False
     )
-    direction = models.BooleanField(choices=DIRECTIONS, null=True)
-    venture = models.DecimalField(
-        choices=VENTURES,
-        null=False,
-        **DEFAULT_NUMERIC_SETTINGS
+    direction_up = models.BooleanField(
+        choices=settings.BET_DIRECTIONS,
+        null=True
     )
-    duration = models.IntegerField(choices=DURATIONS, null=False)
+    venture = models.DecimalField(
+        choices=settings.BET_VENTURES,
+        null=False,
+        **settings.DEFAULT_NUMERIC_SETTINGS
+    )
+    duration = models.IntegerField(
+        choices=settings.BET_DURATIONS,
+        null=False
+    )
     time_start = models.DateTimeField(auto_now_add=True)
     success = models.BooleanField(
         null=True,
@@ -86,7 +83,7 @@ class Bet(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        self.price_when_created = self.commodity.price
+        self.price_when_created = self.asset.price
 
     @property
     def finalized(self):
@@ -108,7 +105,7 @@ class Bet(models.Model):
         print(f'Finish time: {self.time_finish}')
         if self.time_finish > time or self.finalized: return
         print(f'{self} done')
-        success = self.direction == (self.commodity.price -
+        success = self.direction == (self.asset.price -
             self.price_when_created > 0)
         if success:
             print(f'{self} WON!')

@@ -20,8 +20,11 @@ class SignupTestCase(LiveServerTestCase):
             'password': fixtures['password']['match']
         }
         self.user = CustomUser.objects.create_user(**self.user_data)
-        self.driver = driver
+        self.driver = initialize_webdriver()
         self.driver.get(HOST)
+
+    def tearDown(self):
+        self.driver.quit()
 
     def build_data(self, chosen):
         data = dict()
@@ -113,10 +116,10 @@ class SignupTestCase(LiveServerTestCase):
         })
 
 def initialize_webdriver(headless=True):
-    global driver
     options = Options()
     options.headless = headless
     driver = webdriver.Firefox(options=options)
+    return driver
 
 def get_element(*args, **kwargs):
     return get_elements(*args, **kwargs)[0]
@@ -148,5 +151,3 @@ ERROR_CODES = {
 }
 ERROR_CODES['password_confirmation'] = ERROR_CODES['password']
 VALID_PASSWORDS = ['no_match', 'match']
-
-initialize_webdriver()

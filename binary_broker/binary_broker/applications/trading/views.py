@@ -14,33 +14,33 @@ from .auxiliary import *
 from .models import *
 from .forms import *
 
-class CommodityPartialUpdateView(GenericAPIView, UpdateModelMixin):
+class AssetPartialUpdateView(GenericAPIView, UpdateModelMixin):
 
-    queryset = Commodity.objects.all()
-    serializer_class = CommoditySerializer
+    queryset = Asset.objects.all()
+    serializer_class = AssetSerializer
 
     def patch(self, request, *args, **kwargs):
-        print('calling commodity partial update w/patch')
-        instances = Commodity.objects.all()
-        serializer = CommoditySerializer(instances, many=True)
+        print('calling asset partial update w/patch')
+        instances = Asset.objects.all()
+        serializer = AssetSerializer(instances, many=True)
         return Response(serializer.data)
 
-class CommodityListView(ListView):
+class AssetListView(ListView):
 
-    template_name = 'commodity/list.html'
+    template_name = 'Asset/list.html'
 
     def get_queryset(self):
-        return Commodity.objects.all()
+        return Asset.objects.all()
 
-class CommodityDetailView(DetailView):
+class AssetDetailView(DetailView):
 
-    model = Commodity
-    template_name = 'commodity/detail.html'
+    model = Asset
+    template_name = 'asset/detail.html'
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        commodity = kwargs['object']
-        context['price_plot'] = create_price_plot(commodity)
+        asset = kwargs['object']
+        context['price_plot'] = create_price_plot(Asset)
         context['bet_form'] = BetFormPartial()
         return context
 
@@ -50,14 +50,14 @@ def create_bet(request, pk):
     partial_errors = json.loads(partial_form.errors.as_json())
     if partial_form.is_valid():
         print('PARTIAL FORM VALID')
-        # add 'direction', 'owner', 'commodity', 'is_real_account')
+        # add 'direction', 'owner', 'Asset', 'is_real_account')
         bet_info = partial_form.clean()
         user = request.user
-        commodity = Commodity.objects.get(pk=pk)
+        asset = Asset.objects.get(pk=pk)
         bet_info['owner'] = user.profile
         bet_info['direction'] = dict([i[::-1] for i in Bet.DIRECTIONS]).get(
             request.POST['direction'])
-        bet_info['commodity'] = commodity
+        bet_info['asset'] = asset
         bet_info['is_real_account'] = user.profile.chosen_account == \
             Profile.ACCOUNT_TYPES[1]
         print(bet_info)
@@ -76,20 +76,20 @@ def create_bet(request, pk):
         return HttpResponse(json.dumps(partial_errors, ensure_ascii=False))
 
 def create_price_plot_response(request, pk):
-    commodity = Commodity.objects.get(pk=pk)
-    return create_mp_price_plot_response(commodity)
+    asset = Asset.objects.get(pk=pk)
+    return create_mp_price_plot_response(asset)
 
-def create_price_plot(commodity):
-    return create_mp_price_plot(commodity)
+def create_price_plot(asset):
+    return create_mp_price_plot(asset)
 
-def create_mp_price_plot(commodity):
-    price_history = commodity.get_last_records(
+def create_mp_price_plot(asset):
+    price_history = asset.get_last_records(
         datetime.timedelta(seconds=60))
-    return create_mp_price_plot_figure(price_history, title=commodity.name)
+    return create_mp_price_plot_figure(price_history, title=asset.name)
 
-def create_mp_price_plot_response(commodity):
+def create_mp_price_plot_response(asset):
     print('create mp price plot response')
-    plot = create_mp_price_plot(commodity)
+    plot = create_mp_price_plot(asset)
     canvas = FigureCanvas(plot)
     response = HttpResponse(content_type='image/png')
     canvas.print_png(response)

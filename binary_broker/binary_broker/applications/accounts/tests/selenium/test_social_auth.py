@@ -15,8 +15,11 @@ HOST = 'http://localhost:8000'
 class SocialAuthTestCase(LiveServerTestCase):
 
     def setUp(self):
-        self.driver = driver
+        self.driver = initialize_webdriver()
         self.driver.get(HOST)
+
+    def tearDown(self):
+        self.driver.quit()
 
     def social_login(self, provider):
         enter_button = self.driver.find_element_by_id('enter_button')
@@ -36,15 +39,13 @@ class SocialAuthTestCase(LiveServerTestCase):
             except: pass
 
 def initialize_webdriver(headless=True):
-    global driver
     options = Options()
     options.headless = headless
     driver = webdriver.Firefox(options=options)
+    return driver
 
 def get_element(*args, **kwargs):
     return get_elements(*args, **kwargs)[0]
 
 with open('secrets/credentials.json') as file:
     CREDENTIALS = json.load(file)
-
-initialize_webdriver(headless=False)

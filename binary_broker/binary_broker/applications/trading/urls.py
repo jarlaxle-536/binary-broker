@@ -6,27 +6,27 @@ from .views import *
 urlpatterns = [
     path(
         '',
-        login_required(CommodityListView.as_view()),
-        name='commodity_list'
+        login_required(AssetListView.as_view()),
+        name='asset_list'
     ),
     path(
-        'commodity/<int:pk>',
-        login_required(CommodityDetailView.as_view()),
-        name='commodity_detail'
+        'asset/<int:pk>',
+        login_required(AssetDetailView.as_view()),
+        name='asset_detail'
     ),
     path(
-        'commodity/update',
-        CommodityPartialUpdateView.as_view(),
-        name='commodity_update'
+        'asset/update',
+        AssetPartialUpdateView.as_view(),
+        name='asset_update'
     ),
     path(
-        'commodity/<int:pk>/get_price_plot/',
+        'asset/<int:pk>/get_price_plot/',
         create_price_plot_response,
         name='get_price_plot'
     ),
     path(
-        'commodity/<int:pk>/create_bet/',
+        'asset/<int:pk>/create_bet/',
         create_bet,
-        name='create_bet'    
+        name='create_bet'
     )
 ]

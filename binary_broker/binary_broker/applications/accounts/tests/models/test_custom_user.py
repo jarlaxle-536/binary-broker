@@ -1,15 +1,16 @@
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
-from django.test import TestCase
+from django.test import TestCase, tag
 import contextlib
 import faker
 
 from binary_broker.applications.accounts.models import CustomUser
 from binary_broker.applications.accounts.exceptions import *
 
-class UserManagerTest(TestCase):
+@tag('model')
+class CustomUserTest(TestCase):
 
-    """Testing CustomUser manager"""
+    """Testing CustomUser model"""
 
     def general_test(self,
             fixture={'email': None, 'password': None},
@@ -28,11 +29,11 @@ class UserManagerTest(TestCase):
         """Create user with smth missing"""
         self.general_test(
             fixture={'name': 'vasya', 'password': None},
-            exception_catched=EmailNotProvided
+            exception_catched=TypeError
         )
         self.general_test(
             fixture={'email': None},
-            exception_catched=PasswordNotProvided
+#            exception_catched=PasswordNotProvided
         )
 
     def test_create_user_with_smth_invalid(self):
@@ -60,7 +61,7 @@ class UserManagerTest(TestCase):
     def test_profile_created(self):
         """
             Profile is created with user creation.
-            Does not involve manager actually, however, it's here. 
+            Does not involve manager actually, however, it's here.
         """
         self.general_test(
             fixture={'email': None, 'password': None},

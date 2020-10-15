@@ -16,8 +16,8 @@ class BetFormFull(forms.ModelForm):
         fields = (
             'venture',
             'duration',
-            'direction',
+            'direction_up',
             'owner',
-            'commodity',
+            'asset',
             'is_real_account'
         )

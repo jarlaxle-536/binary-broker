@@ -5,11 +5,11 @@ from rest_framework import serializers
 
 from .models import *
 
-class CommoditySerializer(serializers.ModelSerializer):
+class AssetSerializer(serializers.ModelSerializer):
 
     diff = serializers.ReadOnlyField()
     _diff = serializers.ReadOnlyField()
 
     class Meta:
-        model = Commodity
+        model = Asset
         fields = ('id', 'name', 'price', 'mean_price', 'diff', '_diff')
