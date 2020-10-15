@@ -26,7 +26,6 @@ class CustomUserTest(TestCase):
                 check_func(result)
 
     def test_create_user_with_smth_missing(self):
-        """Create user with smth missing"""
         self.general_test(
             fixture={'name': 'vasya', 'password': None},
             exception_catched=TypeError
@@ -37,7 +36,6 @@ class CustomUserTest(TestCase):
         )
 
     def test_create_user_with_smth_invalid(self):
-        """Create user with smth invalid"""
         self.general_test(
             fixture={'email': 'vasya', 'password': None},
             exception_catched=ValidationError
@@ -48,7 +46,6 @@ class CustomUserTest(TestCase):
         )
 
     def test_create_valid_users(self):
-        """Create user with everything valid"""
         self.general_test(
             fixture={'email': None, 'password': None}
         )
@@ -59,10 +56,6 @@ class CustomUserTest(TestCase):
         )
 
     def test_profile_created(self):
-        """
-            Profile is created with user creation.
-            Does not involve manager actually, however, it's here.
-        """
         self.general_test(
             fixture={'email': None, 'password': None},
             check_func=lambda result: self.assertEquals(result, result.profile.user),

@@ -1,15 +1,20 @@
+from django.test import TestCase, TransactionTestCase, tag
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
-from django.test import TestCase, tag
 import contextlib
 import faker
 
 from binary_broker.applications.trading.models import *
 
-@tag('model')
-class AssetTest(TestCase):
+@tag('model', 'asset')
+class AssetModelGeneralTest(TransactionTestCase):
 
-    """Testing Asset model"""
+    def setUp(self):
+        self.default_asset_settings = {
+            'name': 'horns_and_hooves',
+        }
 
-    def test_create_some(self):
-        cmd = Asset.objects.create(name='horns_and_hooves')
+    def test_asset_default_settings(self):
+        asset = Asset.objects.create(**self.default_asset_settings)
+        for field, value in self.default_asset_settings.items():
+            self.assertEquals(getattr(asset, field), value)

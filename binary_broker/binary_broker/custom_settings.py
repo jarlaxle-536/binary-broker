@@ -7,6 +7,16 @@ DEFAULT_NUMERIC_SETTINGS = {
     'decimal_places': 2
 }
 
+# TRADING.MODELS.ASSET
+
+ASSET_MANDATORY_FIELDS = ('name')
+
+# TRADING.MODELS.BET
+
+BET_MANDATORY_FIELDS = (
+    'duration', 'direction_up', 'venture', 'asset', 'owner',
+)
+
 BET_DIRECTIONS = [(True, 'up'), (False, 'down')]
 BET_IS_REAL = [(True, 'yes'), (False, 'no')]
 BET_DURATIONS = [

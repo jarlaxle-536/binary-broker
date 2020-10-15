@@ -5,10 +5,16 @@ from django.conf import settings
 from django.db import models
 
 from binary_broker.applications.accounts.models import *
+from .validators import *
 
 class Asset(models.Model):
 
-    name = models.CharField(max_length=50)
+    name = models.CharField(
+        max_length=50,
+        null=False,
+        unique=True,
+        validators=[validate_not_empty]
+    )
     mean_price = models.DecimalField(
         default=10,
         **settings.DEFAULT_NUMERIC_SETTINGS
@@ -55,16 +61,24 @@ class Asset(models.Model):
 
 class Bet(models.Model):
 
-    asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
-    owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    asset = models.ForeignKey(
+        Asset,
+        on_delete=models.CASCADE,
+        null=False
+    )
+    owner = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+        null=False
+    )
     is_real_account = models.BooleanField(
         choices=settings.BET_IS_REAL,
-        null=True,
+        null=False,
         default=False
     )
     direction_up = models.BooleanField(
         choices=settings.BET_DIRECTIONS,
-        null=True
+        null=False
     )
     venture = models.DecimalField(
         choices=settings.BET_VENTURES,
