@@ -13,4 +13,11 @@ class BetFormFull(forms.ModelForm):
 
     class Meta:
         model = Bet
-        fields = ('venture', 'duration', 'direction', 'owner', 'commodity', 'is_real_account')
+        fields = (
+            'venture',
+            'duration',
+            'direction',
+            'owner',
+            'commodity',
+            'is_real_account'
+        )

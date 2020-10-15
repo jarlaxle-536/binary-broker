@@ -6,6 +6,7 @@ from django.http import JsonResponse
 
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
+import json
 
 from binary_broker.applications.accounts.models import *
 from .serializers import *
@@ -46,20 +47,33 @@ class CommodityDetailView(DetailView):
 def create_bet(request, pk):
     print('creating bet')
     partial_form = BetFormPartial(request.POST)
+    partial_errors = json.loads(partial_form.errors.as_json())
     if partial_form.is_valid():
+        print('PARTIAL FORM VALID')
         # add 'direction', 'owner', 'commodity', 'is_real_account')
         bet_info = partial_form.clean()
-        print(bet_info)
         user = request.user
         commodity = Commodity.objects.get(pk=pk)
         bet_info['owner'] = user.profile
+        bet_info['direction'] = dict([i[::-1] for i in Bet.DIRECTIONS]).get(
+            request.POST['direction'])
         bet_info['commodity'] = commodity
         bet_info['is_real_account'] = user.profile.chosen_account == \
             Profile.ACCOUNT_TYPES[1]
-        print(request.POST)
+        print(bet_info)
+        full_form = BetFormFull(bet_info)
+        full_errors = json.loads(full_form.errors.as_json())
+        if full_form.is_valid():
+            print('FULL FORM VALID')
+            bet = Bet.objects.create(**bet_info)
+        else:
+            print('FULL FORM INVALID')
+            print(full_form.errors)
+        print('BET CREATION DONE')
+        return HttpResponse(json.dumps(full_errors, ensure_ascii=False))
     else:
-        print(partial_form)
-        print(partial_form.errors)
+        print('PARTIAL FORM INVALID')
+        return HttpResponse(json.dumps(partial_errors, ensure_ascii=False))
 
 def create_price_plot_response(request, pk):
     commodity = Commodity.objects.get(pk=pk)
