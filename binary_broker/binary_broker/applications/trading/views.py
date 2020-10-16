@@ -40,13 +40,13 @@ class AssetDetailView(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         asset = kwargs['object']
-        context['price_plot'] = create_price_plot(Asset)
-        context['bet_form'] = BetFormPartial()
+        context['price_plot'] = create_price_plot(asset)
+        context['bet_form'] = PartialBetForm()
         return context
 
 def create_bet(request, pk):
     print('creating bet')
-    partial_form = BetFormPartial(request.POST)
+    partial_form = PartialBetForm(request.POST)
     partial_errors = json.loads(partial_form.errors.as_json())
     if partial_form.is_valid():
         print('PARTIAL FORM VALID')
@@ -55,13 +55,13 @@ def create_bet(request, pk):
         user = request.user
         asset = Asset.objects.get(pk=pk)
         bet_info['owner'] = user.profile
-        bet_info['direction'] = dict([i[::-1] for i in Bet.DIRECTIONS]).get(
-            request.POST['direction'])
+        bet_info['direction_up'] = dict([i[::-1]
+            for i in settings.BET_DIRECTIONS]).get(request.POST['direction'])
         bet_info['asset'] = asset
         bet_info['is_real_account'] = user.profile.chosen_account == \
             Profile.ACCOUNT_TYPES[1]
         print(bet_info)
-        full_form = BetFormFull(bet_info)
+        full_form = BetForm(bet_info)
         full_errors = json.loads(full_form.errors.as_json())
         if full_form.is_valid():
             print('FULL FORM VALID')

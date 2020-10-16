@@ -27,3 +27,8 @@ BET_DURATIONS = [
 ]
 BET_VENTURES = [(v, f'{v} $')
     for v in [1, 2, 5, 10, 20, 50, 100]]
+BET_SUCCESS = [
+    (1, 'Won'),
+    (0, 'Equal'),
+    (-1, 'Lost')
+]

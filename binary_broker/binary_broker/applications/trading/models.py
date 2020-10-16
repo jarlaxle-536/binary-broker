@@ -90,14 +90,15 @@ class Bet(models.Model):
         null=False
     )
     time_start = models.DateTimeField(auto_now_add=True)
-    success = models.BooleanField(
+    success = models.IntegerField(
+        choices=settings.BET_SUCCESS,
         null=True,
         blank=True,
     )
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
         self.price_when_created = self.asset.price
+        super().save(*args, **kwargs)
 
     @property
     def finalized(self):
@@ -113,21 +114,29 @@ class Bet(models.Model):
         return getattr(profile, 'real_account' if self.is_real_account
             else 'demo_account')
 
-    def finalize_by_time(self, time):
+    def finalize_by_time(self, time=None):
+        if time is None:
+            utc = pytz.UTC
+            time = utc.localize(datetime.datetime.utcnow())
         print(f'Finalizing {self}.')
         print(f'Time: {time}')
         print(f'Finish time: {self.time_finish}')
         if self.time_finish > time or self.finalized: return
         print(f'{self} done')
-        success = self.direction_up == (self.asset.price -
-            self.price_when_created > 0)
-        if success:
-            print(f'{self} WON!')
-            self.account.havings += 2 * self.venture
-            self.account.save()
+        diff = self.asset.price - self.price_when_created
+        dir_up_result = diff > 0
+        if self.direction_up == dir_up_result:
+            self.success = 1
+        elif diff == 0:
+            self.success = 0
         else:
-            print(f'{self} LOST!')
-        self.success = success
+            self.success = -1
+        self.save()
+        self.account.havings += self.calculate_income()
+        self.account.save()
         self._finalized = True
         self.save()
         print(self.__dict__)
+
+    def calculate_income(self):
+        return (1 + self.success) * self.venture
