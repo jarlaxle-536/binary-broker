@@ -89,6 +89,10 @@ class Bet(models.Model):
         choices=settings.BET_DURATIONS,
         null=False
     )
+    price_when_created = models.DecimalField(
+        null=True,
+        **settings.DEFAULT_NUMERIC_SETTINGS
+    )
     time_start = models.DateTimeField(auto_now_add=True)
     success = models.IntegerField(
         choices=settings.BET_SUCCESS,

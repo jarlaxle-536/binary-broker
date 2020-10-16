@@ -1,4 +1,5 @@
 from matplotlib import pyplot, dates
+import datetime
 
 def create_mp_price_plot_figure(price_history, profile, title=''):
     """
@@ -21,6 +22,15 @@ def create_mp_price_plot_figure(price_history, profile, title=''):
     ]
     print('bets', profile.bet_set.all())
     print('bets to represent:', bets_to_repr)
+    for b in bets_to_repr:
+        bet_points = [(dt, b.price_when_created) for dt in
+        [b.time_start + datetime.timedelta(seconds=x) for x in
+            range((b.time_finish - b.time_start).seconds)]
+        if time_endpoints[0] <= dt <= time_endpoints[1]]
+        print(bet_points)
+        price_plot.plot(
+            *zip(*bet_points),
+        )
 #    price_plot.axes.set_aspect('equal')
     price_plot.set_title(title)
     figure.autofmt_xdate()
