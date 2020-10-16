@@ -67,4 +67,10 @@ class BetModelGeneralTest(TransactionTestCase):
         bet = Bet.objects.create(**self.default_bet_settings)
         self.assertEquals(bet.account, self.user.profile.demo_account)
 
+    @tag('bet_finalize')
+    def test_bet_finalization(self):
+        print('will test bet.finalize')
+        bet = Bet.objects.create(**self.default_bet_settings)
+        print(f'Actual bets: {Bet.objects.all()}')
+
 FAKER = faker.Faker()

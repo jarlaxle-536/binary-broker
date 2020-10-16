@@ -44,3 +44,6 @@ def add_mp_bet_plots(figure, profile):
     # get all profile bets that have at least one of their time endpoints in
     # current time period
     pass
+
+def sign(val):
+    return 1 if val > 0 else 0 if val == 0 else -1

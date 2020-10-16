@@ -30,7 +30,7 @@ BET_MANDATORY_FIELDS = (
 BET_DIRECTIONS = [(True, 'up'), (False, 'down')]
 BET_IS_REAL = [(True, 'yes'), (False, 'no')]
 BET_DURATIONS = [
-    (2, '2 seconds'),
+    (1, '1 second'),
     (10, '10 seconds'),
     (30, '30 seconds'),
     (60, '1 minute'),

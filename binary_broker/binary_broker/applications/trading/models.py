@@ -1,4 +1,4 @@
-import datetime, decimal, random, pytz
+import datetime, decimal, random, pytz, threading,time
 
 from simple_history.models import HistoricalRecords
 from django import db
@@ -7,6 +7,7 @@ from django.conf import settings
 
 from binary_broker.applications.accounts.models import *
 from .validators import *
+from .auxiliary import *
 
 class Asset(models.Model):
 
@@ -96,7 +97,7 @@ class Bet(models.Model):
         **settings.DEFAULT_NUMERIC_SETTINGS
     )
     time_start = models.DateTimeField(auto_now_add=True)
-    success = models.IntegerField(
+    result = models.IntegerField(
         choices=settings.BET_SUCCESS,
         null=True,
         blank=True,
@@ -111,6 +112,7 @@ class Bet(models.Model):
                 amount=-self.venture, **{
                 k: getattr(self, k) for k in ('owner', 'account_type')}
             )
+#            threading.Thread(target=self.sleep_and_finalize).start()
 
     @property
     def finalized(self):
@@ -125,28 +127,52 @@ class Bet(models.Model):
         return getattr(self.owner,
             settings.PROFILE_ACCOUNT_TYPE_RELATED_NAMES[self.account_type])
 
-    def finalize_by_time(self, time=None):
-        if time is None:
-            utc = pytz.UTC
-            time = utc.localize(datetime.datetime.utcnow())
-        if self.time_finish > time or self.finalized: return
-        print(f'{self} done')
-        diff = self.asset.price - self.price_when_created
-        dir_up_result = diff > 0
-        self.success = (1 if self.direction_up == dir_up_result
-            else 0 if diff == 0 else -1)
-        self.save()
-        transaction = Transaction.objects.create(
-            amount=self.calculate_income(), **{
-            k: v for k, v in bet.__dict__.items()
-            if k in ('owner', 'account_type')}
-        )
-        self._finalized = True
-        self.save()
-        print(self.__dict__)
+    def sleep_and_finalize(self, dt=None):
+        if dt is None:
+            'Engage real-time regime'
+            print(f'Will sleep for {self.duration} seconds.')
+            time.sleep(self.duration)
+        else:
+            'Engage fake script regime'
+            pass
+        self.finalize(dt)
 
-    def calculate_income(self):
-        return (1 + self.success) * self.venture
+    def finalize(self, time_finish=None):
+        """
+            dt is optional parameter used by populate.py script.
+            If None, will be set to current localized time.
+        """
+        time_finish = time_finish if not time_finish is None \
+            else pytz.UTC.localize(datetime.datetime.utcnow())
+        print(f'Bet finalized: {self.finalized}')
+        print(f'Finalize time finish: {time_finish}')
+        print(f'Bet time finish: {self.time_finish}')
+        if self.time_finish > time_finish or self.finalized:
+            "it ain't time to finalize yet or bet was finalized already"
+            return
+        'this way bet.save() will not be triggered'
+        result = self.get_result()
+        print(f'Bet result: {result}')
+        income = self.calculate_income(result)
+        print({
+            k: getattr(self, k) for k in ('owner', 'account_type')})
+#        transaction = Transaction.objects.create(amount=income, **{
+#            k: getattr(self, k) for k in ('owner', 'account_type')})
+        transaction = Transaction.objects.create(
+            amount=income,
+            account_type=self.account_type,
+            owner_id=self.owner.id
+        )
+        print(transaction.__dict__)
+        self._finalized = True
+
+    def get_result(self):
+        price_change_sign = sign(self.asset.price - self.price_when_created)
+        return (1 if self.direction_up == price_change_sign
+            else 0 if price_change_sign == 0 else -1)
+
+    def calculate_income(self, result):
+        return (1 + result) * self.venture
 
 class Transaction(models.Model):
 
