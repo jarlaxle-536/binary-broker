@@ -1,0 +1,47 @@
+{% load i18n %}
+
+<nav class="navbar navbar-expand navbar-dark bg-dark flex-md-column flex-row justify-content-center">
+
+  <h5 class="display-6 text-white" style="text-align: center;">
+    {% trans 'AssetListCaption' %}
+  </h5>
+
+  <table class="table text-white table-striped header-fixed">
+    <thead>
+      <tr>
+        <th scope="col">
+          <a class="text-white" href="#" id="asset_name_btn">
+            {% trans 'AssetName' %}
+          </a>
+        </th>
+        <th scope="col">
+          <a class="text-white" href="#" id="asset_price_btn">
+            {% trans 'AssetPrice' %}
+          </a>
+        </th>
+        <th scope="col">
+          <a class="text-white" href="#" id="asset_diff_btn">
+            {% trans 'AssetDiff' %}
+          </a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for asset in asset_list %}
+      <tr id="asset_{{asset.pk}}_tr">
+        <td id="asset_{{asset.pk}}_name">
+          <a href="{% url 'asset_detail' asset.pk %}" class="nounderline text-white">
+            {{asset.name}}
+          </a>
+        </td>
+        <td id="asset_{{asset.pk}}_price">
+          {{asset.price}}
+        </td>
+        <td id="asset_{{asset.pk}}_diff">
+          0
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</nav>

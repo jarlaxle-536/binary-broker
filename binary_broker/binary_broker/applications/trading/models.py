@@ -119,7 +119,7 @@ class Bet(models.Model):
         print(f'Finish time: {self.time_finish}')
         if self.time_finish > time or self.finalized: return
         print(f'{self} done')
-        success = self.direction == (self.asset.price -
+        success = self.direction_up == (self.asset.price -
             self.price_when_created > 0)
         if success:
             print(f'{self} WON!')

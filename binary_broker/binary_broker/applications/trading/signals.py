@@ -14,6 +14,7 @@ def bet_post_save_handler(sender, **kwargs):
     else:
         bet.account.havings -= bet.venture
         bet.account.save()
+        print(f'will sleep for {bet.duration} seconds.')
 
 SIGNALS = [
     bet_post_save_handler,

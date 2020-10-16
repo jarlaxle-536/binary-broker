@@ -13,9 +13,6 @@ from .auxiliary import *
 def main(request):
     template = loader.get_template('main_page.html')
     context = dict()
-    context['login_form'] = LoginForm()
-    context['signup_form'] = SignUpForm()
-    context = dict()
     users = CustomUser.objects.all()
     users_with_earnings = [(u, sum([
         (lambda s, v: (1 if s else -1) * v)(b.success, b.venture)

@@ -8,19 +8,21 @@ import random
 import faker
 import pytz
 
+from django.conf import settings
+
 from binary_broker.applications.accounts.models import *
 from binary_broker.applications.trading.models import *
 from .scraping_exchange_rates import *
 
-def create_commodities():
+def create_assets():
     exchange_rates = scrape_exchange_rates()
     for currency in sorted(exchange_rates):
-        commodity_info = {
+        asset_info = {
             'name': f'{currency}/EUR',
             'mean_price': exchange_rates[currency]['Exchange Rate = 1 EUR'],
         }
-        commodity_info['price'] = commodity_info['mean_price']
-        Commodity.objects.get_or_create(**commodity_info)
+        asset_info['price'] = asset_info['mean_price']
+        Asset.objects.get_or_create(**asset_info)
 
 def create_bots():
     bots_present = len([cu for cu in CustomUser.objects.all()
@@ -55,8 +57,8 @@ def do_trade():
         for bet in bot_bets:
             bet.finalize_by_time(current_time)
         print(current_time)
-        for cmd in commodities:
-            cmd.price = cmd.get_new_price()
+        for asset in assets:
+            asset.price = asset.get_new_price()
         for user in users:
             bot_trade(user, current_time)
         current_time += datetime.timedelta(seconds=300 * random.random())
@@ -67,16 +69,16 @@ def bot_trade(user, current_time):
     chance = 0.1
     will_trade = random.random() < chance
     if will_trade:
-        available_ventures = [v for v in Bet.VENTURES
+        available_ventures = [v for v in settings.BET_VENTURES
             if v[0] <= user.profile.real_account.havings]
         if available_ventures:
             bet_dict = {
-                'commodity': random.choice(commodities),
+                'asset': random.choice(assets),
                 'owner': user.profile,
                 'is_real_account': True,
-                'direction': random.choice(Bet.DIRECTIONS)[0],
+                'direction_up': random.choice(settings.BET_DIRECTIONS)[0],
                 'venture': random.choice(available_ventures)[0],
-                'duration': random.choice(Bet.DURATIONS)[0],
+                'duration': random.choice(settings.BET_DURATIONS)[0],
             }
             print('user had BEFORE:', user.profile.real_account.havings)
             bet = Bet.objects.create(**bet_dict)
@@ -89,9 +91,9 @@ def bot_trade(user, current_time):
             print(bet.price_when_created)
 
 def run():
-    create_commodities()
-    global commodities, bot_bets
-    commodities = Commodity.objects.all()
+    create_assets()
+    global assets, bot_bets
+    assets = Asset.objects.all()
     bot_bets = list()
     create_bots()
     do_trade()
