@@ -30,16 +30,20 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
     country = CountryField(null=True, blank=True)
-    chosen_account = models.CharField(
+    selected_account_type = models.CharField(
         max_length=20,
         choices=ACCOUNT_TYPES,
-        default=ACCOUNT_TYPES[0],
+        default=ACCOUNT_TYPES[0][0],
         null=False
     )
 
-    @classmethod
-    def get_account_choice(cls, val):
-        return [a for a in cls.ACCOUNT_TYPES if a[0] == val][0]
+    @property
+    def current_account(self):
+        return getattr(
+            self,
+            {'Demo': 'demo_account', 'Real': 'real_account'}[
+                self.selected_account_type]
+        )
 
     def __str__(self):
         return f'{self.user}'

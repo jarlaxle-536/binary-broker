@@ -111,8 +111,8 @@ class Bet(models.Model):
     @property
     def account(self):
         profile = self.owner
-        return getattr(profile, 'real_account' if self.is_real_account
-            else 'demo_account')
+        return getattr(profile,
+            'real_account' if self.is_real_account else 'demo_account')
 
     def finalize_by_time(self, time=None):
         if time is None:

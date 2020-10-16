@@ -92,13 +92,13 @@ def bot_trade(user, current_time):
 
 def run():
     create_assets()
-    global assets, bot_bets
-    assets = Asset.objects.all()
-    bot_bets = list()
-    create_bots()
-    do_trade()
+#    global assets, bot_bets
+#    assets = Asset.objects.all()
+#    bot_bets = list()
+#    create_bots()
+#    do_trade()
 
 FAKER = faker.Faker()
 
 BOTS_NUMBER = 20
-TIME_TO_PASS = datetime.timedelta(hours=1)
+TIME_TO_PASS = datetime.timedelta(minutes=10)

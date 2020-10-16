@@ -45,9 +45,3 @@ class SignUpForm(forms.ModelForm):
             self.add_error('password_confirmation',
                     PasswordsDoNotMatch())
         return self.cleaned_data
-
-class ProfileAccountTypeForm(forms.ModelForm):
-
-    class Meta:
-        model = Profile
-        fields = ('chosen_account', )

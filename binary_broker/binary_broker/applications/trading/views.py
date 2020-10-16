@@ -32,6 +32,9 @@ class AssetListView(ListView):
     def get_queryset(self):
         return Asset.objects.all()
 
+def get_profile_from_request(request):
+    return request.user.profile
+
 class AssetDetailView(DetailView):
 
     model = Asset
@@ -40,7 +43,8 @@ class AssetDetailView(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         asset = kwargs['object']
-        context['price_plot'] = create_price_plot(asset)
+        account = get_profile_from_request(self.request)
+        context['price_plot'] = create_price_plot(asset, account)
         context['bet_form'] = PartialBetForm()
         return context
 
@@ -58,8 +62,8 @@ def create_bet(request, pk):
         bet_info['direction_up'] = dict([i[::-1]
             for i in settings.BET_DIRECTIONS]).get(request.POST['direction'])
         bet_info['asset'] = asset
-        bet_info['is_real_account'] = user.profile.chosen_account == \
-            Profile.ACCOUNT_TYPES[1]
+        bet_info['is_real_account'] = user.profile.selected_account_type == \
+            Profile.ACCOUNT_TYPES[1][0]
         print(bet_info)
         full_form = BetForm(bet_info)
         full_errors = json.loads(full_form.errors.as_json())
@@ -77,19 +81,20 @@ def create_bet(request, pk):
 
 def create_price_plot_response(request, pk):
     asset = Asset.objects.get(pk=pk)
-    return create_mp_price_plot_response(asset)
+    account = get_profile_from_request(request)
+    return create_mp_price_plot_response(asset, account)
 
-def create_price_plot(asset):
-    return create_mp_price_plot(asset)
+def create_price_plot(asset, account):
+    return create_mp_price_plot(asset, account)
 
-def create_mp_price_plot(asset):
+def create_mp_price_plot(asset, account):
     price_history = asset.get_last_records(
         datetime.timedelta(seconds=60))
-    return create_mp_price_plot_figure(price_history, title=asset.name)
+    return create_mp_price_plot_figure(price_history, account, title=asset.name)
 
-def create_mp_price_plot_response(asset):
+def create_mp_price_plot_response(asset, account):
     print('create mp price plot response')
-    plot = create_mp_price_plot(asset)
+    plot = create_mp_price_plot(asset, account)
     canvas = FigureCanvas(plot)
     response = HttpResponse(content_type='image/png')
     canvas.print_png(response)
