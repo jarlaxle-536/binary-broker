@@ -71,10 +71,11 @@ class Bet(models.Model):
         on_delete=models.CASCADE,
         null=False
     )
-    is_real_account = models.BooleanField(
-        choices=settings.BET_IS_REAL,
-        null=False,
-        default=False
+    account_type = models.CharField(
+        max_length=20,
+        choices=settings.PROFILE_ACCOUNT_TYPES,
+        default=settings.PROFILE_ACCOUNT_TYPES[0][0],
+        null=False
     )
     direction_up = models.BooleanField(
         choices=settings.BET_DIRECTIONS,
@@ -114,33 +115,51 @@ class Bet(models.Model):
 
     @property
     def account(self):
-        profile = self.owner
-        return getattr(profile,
-            'real_account' if self.is_real_account else 'demo_account')
+        return getattr(self.owner,
+            settings.PROFILE_ACCOUNT_TYPE_RELATED_NAMES[self.account_type])
 
     def finalize_by_time(self, time=None):
         if time is None:
             utc = pytz.UTC
             time = utc.localize(datetime.datetime.utcnow())
-        print(f'Finalizing {self}.')
-        print(f'Time: {time}')
-        print(f'Finish time: {self.time_finish}')
         if self.time_finish > time or self.finalized: return
         print(f'{self} done')
         diff = self.asset.price - self.price_when_created
         dir_up_result = diff > 0
-        if self.direction_up == dir_up_result:
-            self.success = 1
-        elif diff == 0:
-            self.success = 0
-        else:
-            self.success = -1
+        self.success = (1 if self.direction_up == dir_up_result
+            else 0 if diff == 0 else -1)
         self.save()
-        self.account.havings += self.calculate_income()
-        self.account.save()
+        transaction = Transaction.objects.create(
+            amount=self.calculate_income(), **{
+            k: v for k, v in bet.__dict__.items()
+            if k in ('owner', 'account_type')}
+        )
         self._finalized = True
         self.save()
         print(self.__dict__)
 
     def calculate_income(self):
         return (1 + self.success) * self.venture
+
+class Transaction(models.Model):
+
+    owner = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+        null=False
+    )
+    account_type = models.CharField(
+        max_length=20,
+        choices=settings.PROFILE_ACCOUNT_TYPES,
+        default=settings.PROFILE_ACCOUNT_TYPES[0][0],
+        null=False
+    )
+    amount = models.DecimalField(
+        null=False,
+        **settings.DEFAULT_NUMERIC_SETTINGS
+    )
+
+    @property
+    def account(self):
+        return getattr(self.owner,
+            settings.PROFILE_ACCOUNT_TYPE_RELATED_NAMES[self.account_type])

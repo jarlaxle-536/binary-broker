@@ -7,9 +7,19 @@ DEFAULT_NUMERIC_SETTINGS = {
     'decimal_places': 2
 }
 
+# ACCOUNTS.MODELS.PROFILE
+
+PROFILE_ACCOUNT_TYPES = [
+    (v, str(v)) for v in ('Demo', 'Real')
+]
+PROFILE_ACCOUNT_TYPE_RELATED_NAMES = {
+    'Demo': 'demo_account',
+    'Real': 'real_account'
+}
+
 # TRADING.MODELS.ASSET
 
-ASSET_MANDATORY_FIELDS = ('name')
+ASSET_MANDATORY_FIELDS = ('name', )
 
 # TRADING.MODELS.BET
 

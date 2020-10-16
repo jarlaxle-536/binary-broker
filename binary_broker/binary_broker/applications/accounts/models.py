@@ -1,8 +1,10 @@
+import random
+
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django_countries.fields import CountryField
+from django.conf import settings
 from django.db import models
-import random
 
 from .managers import UserManager
 
@@ -24,26 +26,21 @@ class Bot(CustomUser):
 
 class Profile(models.Model):
 
-    ACCOUNT_TYPES = [(v, str(v)) for v in ['Demo', 'Real']]
-
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
     country = CountryField(null=True, blank=True)
     selected_account_type = models.CharField(
         max_length=20,
-        choices=ACCOUNT_TYPES,
-        default=ACCOUNT_TYPES[0][0],
+        choices=settings.PROFILE_ACCOUNT_TYPES,
+        default=settings.PROFILE_ACCOUNT_TYPES[0][0],
         null=False
     )
 
     @property
     def current_account(self):
-        return getattr(
-            self,
-            {'Demo': 'demo_account', 'Real': 'real_account'}[
-                self.selected_account_type]
-        )
+        return getattr(self,
+            PROFILE_ACCOUNT_TYPE_RELATED_NAMES[self.selected_account_type])
 
     def __str__(self):
         return f'{self.user}'
@@ -61,7 +58,7 @@ class DemoCashAccount(CashAccount):
     profile = models.OneToOneField(
         *CashAccount.profile_args,
         **CashAccount.profile_kwargs,
-        related_name='demo_account'
+        related_name=settings.PROFILE_ACCOUNT_TYPE_RELATED_NAMES['Demo']
     )
     havings = models.DecimalField(
         **CashAccount.havings_settings,
@@ -76,7 +73,7 @@ class RealCashAccount(CashAccount):
     profile = models.OneToOneField(
         *CashAccount.profile_args,
         **CashAccount.profile_kwargs,
-        related_name='real_account'
+        related_name=settings.PROFILE_ACCOUNT_TYPE_RELATED_NAMES['Real']
     )
     havings = models.DecimalField(
         **CashAccount.havings_settings,

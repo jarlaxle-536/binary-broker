@@ -13,7 +13,7 @@ class BetForm(forms.ModelForm):
             'direction_up',
             'owner',
             'asset',
-            'is_real_account'
+            'account_type'
         )
 
 class PartialBetForm(BetForm):
