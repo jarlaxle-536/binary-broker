@@ -70,9 +70,9 @@ class TransactionModelTest(TransactionTestCase):
         bet_settings = self.default_bet_settings.copy()
         bet_settings['venture'] = 10 ** 6
         prev_count = Bet.objects.count()
+        'make sure no bet is created if transaction fails'
         with self.assertRaises(NotSufficientHavings):
             bet = Bet.objects.create(**bet_settings)
-        'make sure no bet is created if transaction fails'
         self.assertEquals(Bet.objects.count(), prev_count)
 
 FAKER = faker.Faker()

@@ -24,7 +24,7 @@ ASSET_MANDATORY_FIELDS = ('name', )
 # TRADING.MODELS.BET
 
 BET_MANDATORY_FIELDS = (
-    'duration', 'direction_up', 'venture', 'asset', 'owner',
+    'duration', 'direction_up', 'venture', 'asset', 'owner'
 )
 
 BET_DIRECTIONS = [(True, 'up'), (False, 'down')]

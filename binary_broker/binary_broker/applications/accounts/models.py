@@ -39,8 +39,8 @@ class Profile(models.Model):
 
     @property
     def current_account(self):
-        return getattr(self,
-            PROFILE_ACCOUNT_TYPE_RELATED_NAMES[self.selected_account_type])
+        return getattr(self, settings.PROFILE_ACCOUNT_TYPE_RELATED_NAMES[
+            self.selected_account_type])
 
     def __str__(self):
         return f'{self.user}'

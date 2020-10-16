@@ -75,8 +75,8 @@ class Bet(models.Model):
     account_type = models.CharField(
         max_length=20,
         choices=settings.PROFILE_ACCOUNT_TYPES,
-        default=settings.PROFILE_ACCOUNT_TYPES[0][0],
-        null=False
+        null=False,
+        validators=[validate_not_empty]
     )
     direction_up = models.BooleanField(
         choices=settings.BET_DIRECTIONS,
@@ -104,12 +104,13 @@ class Bet(models.Model):
 
     def save(self, *args, **kwargs):
         self.price_when_created = self.asset.price
+        self.account_type = self.owner.selected_account_type
         with db.transaction.atomic():
+            super().save(*args, **kwargs)
             transaction = Transaction.objects.create(
                 amount=-self.venture, **{
                 k: getattr(self, k) for k in ('owner', 'account_type')}
             )
-            super().save(*args, **kwargs)
 
     @property
     def finalized(self):

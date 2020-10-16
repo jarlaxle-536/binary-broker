@@ -18,3 +18,7 @@ class AssetModelGeneralTest(TransactionTestCase):
         asset = Asset.objects.create(**self.default_asset_settings)
         for field, value in self.default_asset_settings.items():
             self.assertEquals(getattr(asset, field), value)
+
+    def test_asset_has_at_least_one_historical_record(self):
+        asset = Asset.objects.create(**self.default_asset_settings)
+        self.assertTrue(asset.history.count() >= 1)
