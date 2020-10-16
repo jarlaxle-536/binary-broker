@@ -30,13 +30,14 @@ BET_MANDATORY_FIELDS = (
 BET_DIRECTIONS = [(True, 'up'), (False, 'down')]
 BET_IS_REAL = [(True, 'yes'), (False, 'no')]
 BET_DURATIONS = [
+    (2, '2 seconds'),
     (10, '10 seconds'),
     (30, '30 seconds'),
     (60, '1 minute'),
     (120, '2 minutes')
 ]
 BET_VENTURES = [(v, f'{v} $')
-    for v in [1, 2, 5, 10, 20, 50, 100]]
+    for v in [0, 1, 2, 5, 10, 20, 50, 100, 10 ** 6]]
 BET_SUCCESS = [
     (1, 'Won'),
     (0, 'Equal'),

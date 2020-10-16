@@ -1,8 +1,9 @@
 import datetime, decimal, random, pytz
 
 from simple_history.models import HistoricalRecords
-from django.conf import settings
+from django import db
 from django.db import models
+from django.conf import settings
 
 from binary_broker.applications.accounts.models import *
 from .validators import *
@@ -103,7 +104,12 @@ class Bet(models.Model):
 
     def save(self, *args, **kwargs):
         self.price_when_created = self.asset.price
-        super().save(*args, **kwargs)
+        with db.transaction.atomic():
+            transaction = Transaction.objects.create(
+                amount=-self.venture, **{
+                k: getattr(self, k) for k in ('owner', 'account_type')}
+            )
+            super().save(*args, **kwargs)
 
     @property
     def finalized(self):
@@ -163,3 +169,12 @@ class Transaction(models.Model):
     def account(self):
         return getattr(self.owner,
             settings.PROFILE_ACCOUNT_TYPE_RELATED_NAMES[self.account_type])
+
+    def clean(self):
+        cleaned_data = super().clean()
+        validate_sufficient_havings(self.account, self.amount)
+        return cleaned_data
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)

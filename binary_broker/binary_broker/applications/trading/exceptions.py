@@ -1,2 +1,2 @@
-class VentureBiggerThanAccountHavings(Exception):
+class NotSufficientHavings(Exception):
     pass
